@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bharat Bhoogol · भारत भूगोल</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, precise, quietly helpful — like a well-made Apple app.
+   IDEA: an Apple Maps sheet of India with frosted controls floating over it.
+   PICTURE: the map on the chosen date fills the screen; the pieces are its own shapes in soft system colours.
+   COLOUR and TYPE: Apple Maps water and land, system blue for action, system red pins; SF Pro (Inter elsewhere).
+   LAYOUT: map is the stage; a glass timeline card with an Apple slider; an inset sidebar for quizzes. */
+:root{color-scheme:light dark;
+  --sea:light-dark(#aed6f1,#15283a);--land:light-dark(#f8f6f1,#2c2c2e);--landh:light-dark(#fff1d0,#3d3d42);
+  --border:light-dark(#c3b9a6,#55555c);--coast:light-dark(rgba(60,70,80,.32),rgba(200,215,230,.32));
+  --ink:light-dark(#1d1d1f,#f5f5f7);--mute:light-dark(#6e6e73,#98989d);
+  --panel:light-dark(#ffffff,#2c2c2e);--side:light-dark(#f2f2f7,#1c1c1e);
+  --glass:light-dark(rgba(255,255,255,.74),rgba(40,40,44,.72));--blur:saturate(180%) blur(22px);
+  --fill:light-dark(rgba(120,120,128,.12),rgba(120,120,128,.26));--fill2:light-dark(rgba(120,120,128,.2),rgba(120,120,128,.36));
+  --line:light-dark(rgba(60,60,67,.14),rgba(84,84,88,.55));--chip:var(--fill);
+  --accent:light-dark(#007aff,#0a84ff);--accentInk:#fff;--ok:light-dark(#34c759,#30d158);--red:light-dark(#ff3b30,#ff453a);
+  --hatch:light-dark(#c9c1b0,#5c5c62);
+  --c0:light-dark(#ffb340,#e89a2e);--c1:light-dark(#ff8097,#e2647c);--c2:light-dark(#62a9ff,#3f8fea);
+  --c3:light-dark(#72d37d,#4fbf5e);--c4:light-dark(#bc90f5,#a373e8);--c5:light-dark(#ffd84a,#e0bb2c);--c6:light-dark(#52d1c4,#34bbaf);
+  --shadow:0 10px 30px light-dark(rgba(0,0,0,.12),rgba(0,0,0,.45)),0 1px 2px light-dark(rgba(0,0,0,.06),rgba(0,0,0,.3));
+  --sf:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue","Noto Sans Devanagari",system-ui,sans-serif;
+  --sfd:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Helvetica Neue","Noto Sans Devanagari",system-ui,sans-serif}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--sea);color:var(--ink);font:16px/1.45 var(--sf);letter-spacing:-.01em;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-font-smoothing:antialiased}
+input,textarea,.code{-webkit-user-select:text;user-select:text}
+.glass{background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.cap{display:none}
+button,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer;border:0;background:var(--fill);border-radius:980px;min-height:36px;padding:0 16px;font-weight:600;font-size:15px;transition:transform .12s,background .15s,opacity .15s}
+button:hover{background:var(--fill2)}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,.tile:focus-visible,.slider:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:2px}
+button:disabled{opacity:.35;cursor:default;transform:none}
+.primary{background:var(--accent);color:var(--accentInk)}
+.primary:hover{background:color-mix(in srgb,var(--accent) 88%,#000)}
+.icon{width:36px;padding:0;display:inline-grid;place-items:center;border-radius:50%}
+.link{background:none;padding:0;min-height:0;color:var(--accent);font-weight:500}
+.link:hover{background:none;text-decoration:underline}
+h1,h2,h3{font-family:var(--sfd);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.022em;font-weight:700}
+#app[hidden]{display:none}
+#app{position:fixed;inset:0;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
+.top{grid-column:1/-1;grid-row:1;display:flex;align-items:center;gap:10px;padding:12px 14px;position:relative;z-index:5;pointer-events:none}
+.top>*{pointer-events:auto}
+.top button,.zoom button{background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);box-shadow:var(--shadow);min-height:38px}
+.top button:hover,.zoom button:hover{background:var(--panel)}
+.top .primary{background:var(--accent);color:#fff}.top .primary:hover{background:color-mix(in srgb,var(--accent) 88%,#000)}
+.top .icon,.zoom .icon{width:38px}
+.brand{display:flex;align-items:center;gap:10px;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:980px;padding:6px 18px 6px 7px;box-shadow:var(--shadow)}
+.brand b{font-family:var(--sfd);font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.brand span{font-family:var(--sfd);font-weight:700;font-size:19px;color:var(--accent);letter-spacing:-.02em;line-height:1}
+.brand small{display:block;color:var(--mute);font-size:12.5px;line-height:1.15;margin-top:2px;letter-spacing:0}
+.brand>div{white-space:nowrap}
+.actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.themebtn{flex:none}
+.sm{display:none}
+#dragG.snap path{stroke:var(--accent)!important;stroke-width:2.5!important;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--accent) 70%,transparent)) drop-shadow(0 8px 14px rgba(0,0,0,.2))}
+#dragG.snap text{font-weight:700}
+.tile{cursor:grab}
+html.dragging,html.dragging *{cursor:grabbing!important}
+html.dropok,html.dropok *{cursor:var(--okcur,copy)!important}
+#side{grid-column:1;grid-row:1/4;width:344px;margin:74px 0 10px 10px;border-radius:22px;background:var(--side);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto;padding:18px;gap:16px;z-index:4;scrollbar-width:thin}
+#side[hidden]{display:none}
+#stage{grid-column:2;grid-row:1/3;position:relative;overflow:hidden;touch-action:none}
+body.noside #stage{grid-column:1/-1}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;-webkit-user-select:none}
+.u{fill:var(--land);stroke:none;cursor:pointer;transition:fill .18s}
+.u.foreign{fill:url(#hatch)}
+.u.hov{fill:var(--landh)}
+.u.on{stroke:none}
+.c0{fill:var(--c0)}.c1{fill:var(--c1)}.c2{fill:var(--c2)}.c3{fill:var(--c3)}.c4{fill:var(--c4)}.c5{fill:var(--c5)}.c6{fill:var(--c6)}
+.u.flash{animation:flash .7s ease-out}
+@keyframes flash{0%{filter:brightness(1.35) saturate(1.2)}100%{filter:none}}
+.play .u{cursor:default}.play.selecting .u,.play.selecting .ring{cursor:crosshair}
+#borders{fill:none;stroke:var(--border);stroke-width:.9;vector-effect:non-scaling-stroke;pointer-events:none}
+#pborders{fill:none;stroke:light-dark(rgba(60,50,30,.45),rgba(220,220,230,.4));stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}
+svg.play #borders{stroke:light-dark(rgba(110,95,70,.85),rgba(200,200,210,.55));stroke-width:1.2}
+#outline{fill:none;stroke:var(--coast);stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}
+.ring{fill:transparent;stroke:var(--mute);stroke-width:1.1;stroke-dasharray:3 3;vector-effect:non-scaling-stroke;cursor:pointer}
+.ring.on{stroke:var(--ink);stroke-dasharray:none}
+#labels text{font-family:var(--sf);font-weight:600;fill:var(--ink);paint-order:stroke;stroke:light-dark(rgba(255,255,255,.85),rgba(20,20,22,.8));stroke-linejoin:round;pointer-events:none;letter-spacing:-.01em}
+#labels text.ctx{fill:var(--mute);font-weight:500;font-style:italic}
+#labels text.dim{fill:var(--mute);font-weight:500}
+#labels text.city{font-weight:600;fill:var(--ink)}
+.zoom{position:absolute;right:14px;bottom:14px;display:flex;flex-direction:column;gap:8px;z-index:3;align-items:flex-end}
+.zoom button{font-size:19px;font-weight:500}
+.zoom .capbtn{display:inline-flex;align-items:center;gap:7px;font-size:15px;font-weight:600;padding:0 14px}
+.zoom .capbtn svg{color:var(--red)}
+.zoom .capbtn.on{background:var(--accent);color:#fff}.zoom .capbtn.on svg{color:#fff}
+body.play #zcaps{display:none}
+body.explore .zoom{bottom:auto;top:72px}
+#pins .pm{fill:var(--ink);stroke:var(--panel);stroke-width:1.6;vector-effect:non-scaling-stroke}
+#pins .ps{fill:var(--panel);stroke:var(--ink);stroke-width:1.8;vector-effect:non-scaling-stroke}
+#pins .pn{fill:var(--red);stroke:var(--panel);stroke-width:1.2;vector-effect:non-scaling-stroke}
+#pins .hit{fill:transparent;cursor:pointer}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-radius:10px;padding:2px;gap:2px;background:var(--fill)}
+.seg button{min-height:32px;background:transparent;border-radius:8px;font-size:14px;font-weight:500;padding:0 6px;color:var(--ink)}
+.seg button:hover{background:transparent}
+.seg button.on{background:light-dark(#fff,#636366);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04);font-weight:600}
+#tip{position:absolute;z-index:6;pointer-events:none;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:14px;box-shadow:var(--shadow);padding:9px 13px;max-width:270px;font-size:14px;line-height:1.35}
+#tip b{display:block;font-size:15px;font-weight:600}#tip i{color:var(--mute);font-style:normal;font-size:13px}#tip p{margin:5px 0 0;color:var(--ink)}
+/* timeline */
+#tl{grid-column:2;grid-row:3;margin:0 auto 14px;width:min(820px,calc(100% - 28px));background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:26px;box-shadow:var(--shadow);padding:16px 20px 14px;z-index:4}
+body.noside #tl{grid-column:1/-1}
+#tl[hidden]{display:none}
+.tl-head{display:flex;align-items:center;gap:10px}
+.tl-date{flex:1;text-align:center}
+.tl-date h2{font-size:clamp(22px,3.2vw,30px);font-variant-numeric:tabular-nums}
+.tl-date .chip{display:inline-block;font:600 12px/1 var(--sf);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);border-radius:980px;padding:5px 9px;vertical-align:middle;margin-left:8px;letter-spacing:0}
+#tlTitle{font-weight:600;color:var(--ink);font-size:15px;margin-top:3px}
+#tlText{margin:4px auto 2px;color:var(--mute);font-size:14px;max-width:62ch;text-align:center;min-height:2.6em}
+.datein{border:0;border-radius:980px;min-height:36px;padding:0 12px;background:var(--fill);font-size:15px;width:150px;color:var(--ink)}
+/* Apple-style slider */
+.slider{position:relative;height:64px;touch-action:none;cursor:pointer;outline:none;margin:2px 0 0}
+.slider .track{position:absolute;left:14px;right:14px;top:22px;height:4px;border-radius:4px;background:var(--fill2)}
+.slider .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--accent);transition:width .25s cubic-bezier(.2,.8,.2,1)}
+.slider .marks i{position:absolute;top:22px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:light-dark(rgba(0,0,0,.28),rgba(255,255,255,.35));pointer-events:none}
+.slider .marks i.done{background:rgba(255,255,255,.85)}
+.slider .years span{position:absolute;top:42px;transform:translateX(-50%);font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums;pointer-events:none}
+.slider .thumb{position:absolute;top:10px;width:28px;height:28px;margin-left:-14px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.04);transition:left .25s cubic-bezier(.2,.8,.2,1),transform .15s;pointer-events:none}
+.slider.drag .thumb,.slider.drag .fill{transition:none}
+.slider.drag .thumb{transform:scale(1.12)}
+.slider .bubble{position:absolute;left:50%;bottom:36px;transform:translate(-50%,6px) scale(.9);opacity:0;white-space:nowrap;background:var(--ink);color:var(--panel);font:600 13px/1 var(--sf);padding:7px 10px;border-radius:9px;transition:opacity .15s,transform .15s;font-variant-numeric:tabular-nums}
+.slider.drag .bubble,.slider:focus-visible .bubble{opacity:1;transform:translate(-50%,0) scale(1)}
+.tl-foot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tl-foot p{margin:0;font-size:13px;color:var(--mute)}
+/* side panels */
+.field{display:grid;gap:6px;font-size:13px;font-weight:500;color:var(--mute)}
+.field input,.field textarea{border:0;border-radius:11px;padding:10px 12px;background:var(--panel);font-size:16px;font-weight:400;color:var(--ink)}
+.field textarea{resize:vertical;min-height:76px;line-height:1.4}
+#pop .field input,#pop .field textarea{background:var(--fill)}
+.toggle{display:flex;gap:12px;align-items:center;font-size:15px;cursor:pointer;min-height:44px;background:var(--panel);border-radius:12px;padding:6px 8px 6px 14px}
+.toggle input{appearance:none;-webkit-appearance:none;order:2;margin:0 0 0 auto;flex:none;width:51px;height:31px;border-radius:31px;background:var(--fill2);position:relative;cursor:pointer;transition:background .25s}
+.toggle input::before{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.toggle input:checked{background:var(--ok)}
+.toggle input:checked::before{transform:translateX(20px)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row h3{font-size:20px;margin-right:auto}
+.hint{margin:0;color:var(--mute);font-size:13.5px}
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:0;background:var(--panel);border-radius:14px;overflow:hidden}
+.plist li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 8px 10px 14px;cursor:pointer;position:relative}
+.plist li+li::before{content:"";position:absolute;top:0;left:38px;right:0;height:.5px;background:var(--line)}
+.plist li:hover{background:var(--fill)}
+.plist .sw{width:12px;height:12px;border-radius:50%}
+.plist b{display:block;font-size:15px;line-height:1.25;font-weight:600}
+.plist small{display:block;color:var(--mute);font-size:13px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plist button{min-height:30px;width:30px;padding:0;background:none;color:var(--mute);font-size:20px;border-radius:50%}
+.plist button:hover{background:var(--fill);color:var(--red)}
+.empty{background:var(--panel);border-radius:14px;padding:18px;color:var(--mute);font-size:14px;text-align:center}
+.sw0{background:var(--c0)}.sw1{background:var(--c1)}.sw2{background:var(--c2)}.sw3{background:var(--c3)}.sw4{background:var(--c4)}.sw5{background:var(--c5)}.sw6{background:var(--c6)}
+.ptitle{font-size:clamp(26px,3vw,32px)}
+.sub{margin:4px 0 0;color:var(--mute);font-size:15px}
+.prog{display:grid;gap:7px;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:6px;background:var(--fill2);overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:6px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.bank{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--panel);border-radius:16px;padding:8px 4px 6px;display:grid;justify-items:center;align-content:start;gap:0;min-height:100px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;position:relative;box-shadow:0 1px 2px light-dark(rgba(0,0,0,.05),rgba(0,0,0,.3));transition:transform .15s,box-shadow .15s,opacity .15s}
+.tile:hover{transform:translateY(-1px);box-shadow:0 6px 16px light-dark(rgba(0,0,0,.1),rgba(0,0,0,.4))}
+.tile svg{width:100%;height:62px;overflow:visible;pointer-events:none}
+.tile span{font-size:12px;line-height:1.15;text-align:center;font-weight:600;padding:4px 2px 0;overflow-wrap:break-word;max-width:100%}
+.tile span.long{font-size:11px}
+.tile em{font-style:normal;font-size:11px;color:var(--mute);line-height:1.15;text-align:center;padding:1px 2px 0;overflow-wrap:break-word;max-width:100%}
+.tile.pin svg{height:38px;margin:6px 0 2px}
+.tile.sel{box-shadow:0 0 0 2.5px var(--accent)}
+.tile.lift{opacity:.3}
+.tile.bad{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.tile path{vector-effect:non-scaling-stroke;stroke-width:1.4}
+.done-bank{text-align:center;color:var(--ok);font-weight:600;padding:18px;background:color-mix(in srgb,var(--ok) 12%,transparent);border-radius:14px}
+/* prompt card */
+#prompt{position:absolute;left:50%;top:68px;transform:translateX(-50%);width:min(560px,calc(100% - 28px));background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:18px;box-shadow:var(--shadow);padding:12px 12px 12px 16px;z-index:3;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center}
+#prompt[hidden]{display:none}
+#prompt small{justify-self:start;color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent);font-size:12px;font-weight:600;border-radius:980px;padding:3px 9px}
+#prompt.ok small{color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+#prompt p{margin:0;font-size:17px;line-height:1.35;grid-column:1}
+#prompt .nav{grid-column:2;grid-row:1/3;display:flex;gap:6px}
+#prompt .nav button{width:34px;min-height:34px;padding:0;border-radius:50%;font-size:18px}
+#toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%) translateY(8px);background:light-dark(rgba(30,30,32,.86),rgba(245,245,247,.9));color:light-dark(#fff,#1d1d1f);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);padding:10px 18px;border-radius:980px;font-weight:600;font-size:15px;z-index:6;opacity:0;transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none;white-space:nowrap;box-shadow:var(--shadow)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* popover */
+#pop{position:absolute;z-index:7;width:310px;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:18px;box-shadow:var(--shadow);padding:14px 16px 16px;display:grid;gap:12px}
+#pop[hidden]{display:none}
+.pop-h{display:flex;align-items:start;gap:8px}.pop-h b{font-family:var(--sfd);font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.15;flex:1}
+.pop-h small{display:block;font:500 13px var(--sf);color:var(--mute);letter-spacing:0}
+.pop-h .icon{width:30px;min-height:30px;font-size:13px}
+.pop-f{display:flex;gap:8px;justify-content:space-between}
+#popRemove{color:var(--red)}
+/* drag overlay */
+#drag{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:20;overflow:visible}
+#drag path{vector-effect:non-scaling-stroke;stroke-width:1.5;filter:drop-shadow(0 8px 14px rgba(0,0,0,.22))}
+#drag text{font:600 13px var(--sf);fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+#drag circle{fill:none;stroke:var(--ink);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.wm{position:fixed;bottom:4px;z-index:6;font-size:11px;color:var(--mute);pointer-events:none;opacity:.85}.wl{left:14px}.wr{right:14px}
+.zoom{margin-bottom:12px}#side{margin-bottom:22px!important}#tl{margin-bottom:20px!important}
+@media (max-width:760px){.wr{display:none}.wl{left:50%;transform:translateX(-50%);bottom:1px;font-size:10px}}
+/* onboarding tour */
+#tour{position:fixed;inset:0;z-index:40}
+#tour[hidden]{display:none}
+#tour .spot{position:fixed;border-radius:18px;box-shadow:0 0 0 3px rgba(255,255,255,.95),0 0 0 9999px rgba(0,0,0,.58),0 0 40px 6px rgba(0,0,0,.35);transition:left .38s cubic-bezier(.2,.8,.2,1),top .38s cubic-bezier(.2,.8,.2,1),width .38s cubic-bezier(.2,.8,.2,1),height .38s cubic-bezier(.2,.8,.2,1),border-radius .38s;pointer-events:none}
+#tour .spot.none{box-shadow:0 0 0 9999px rgba(0,0,0,.58)}
+#tour .tcard{position:fixed;width:min(340px,calc(100vw - 24px));background:var(--panel);border-radius:20px;padding:18px 18px 14px;box-shadow:0 24px 60px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.18);display:grid;gap:8px;transition:left .38s cubic-bezier(.2,.8,.2,1),top .38s cubic-bezier(.2,.8,.2,1),opacity .2s;animation:rise .3s cubic-bezier(.2,.8,.2,1)}
+#tour h3{font-size:20px}
+#tour p{margin:0;font-size:15px;line-height:1.45;color:var(--ink)}
+#tour p b{font-weight:600}
+.tdots{display:flex;gap:5px}.tdots i{width:6px;height:6px;border-radius:6px;background:var(--fill2);transition:width .25s,background .25s}.tdots i.on{width:18px;background:var(--accent)}
+.tbtns{display:flex;align-items:center;gap:8px;margin-top:6px}.tbtns span{flex:1}
+.tarrow{position:absolute;width:16px;height:16px;background:var(--panel);transform:rotate(45deg);border-radius:3px;box-shadow:-2px -2px 4px rgba(0,0,0,.06)}
+.tarrow[hidden]{display:none}
+/* modal */
+#modal{position:fixed;inset:0;z-index:30;background:light-dark(rgba(0,0,0,.22),rgba(0,0,0,.5));-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;animation:fade .2s}
+#modal[hidden]{display:none}
+@keyframes fade{from{opacity:0}}
+@keyframes rise{from{transform:translateY(14px) scale(.98);opacity:0}}
+.card{background:var(--panel);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);width:min(520px,100%);max-height:calc(100vh - 32px);overflow:auto;padding:24px;display:grid;gap:14px;animation:rise .28s cubic-bezier(.2,.8,.2,1)}
+.card h2{font-size:28px}
+.card p{margin:0}
+.code{width:100%;border:0;border-radius:12px;padding:12px;font:14px/1.4 ui-monospace,"SF Mono",Menlo,monospace;background:var(--fill);resize:none;overflow-wrap:anywhere;color:var(--ink)}
+.samples{display:grid;gap:8px}
+.samples button{text-align:left;padding:12px 16px;display:grid;gap:2px;height:auto;border-radius:14px;font-size:16px}
+.samples button small{color:var(--mute);font-weight:400;font-size:14px}
+.samples .row>button:last-child{border-radius:980px;color:var(--accent)}
+.err{color:var(--red);font-size:14px;margin:0}
+.big{font-family:var(--sfd);font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--ok)}
+.load{position:fixed;inset:0;display:grid;place-items:center;font:600 20px var(--sfd);color:var(--mute)}
+@media (max-width:760px){
+  #app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
+  #stage{grid-column:1;grid-row:1/3}
+  #side{grid-column:1;grid-row:3;width:auto;max-height:46vh;margin:0 8px 8px;padding:14px 14px 12px;gap:12px;border-radius:22px}
+  #side::before{content:"";align-self:center;flex:none;width:36px;height:5px;border-radius:5px;background:var(--fill2);margin:-6px 0 -4px}
+  #tl{grid-column:1;grid-row:3;margin:0 8px 8px;width:auto;padding:12px 14px 10px;border-radius:24px}
+  .brand small{display:none}.brand{padding:5px 13px 5px 6px;gap:8px}.brand b,.brand span{font-size:16px}.brand svg{width:28px;height:28px}
+  body:not(.explore) .brand{display:none}
+  .sm{display:inline}.lg{display:none}.top{align-items:flex-start;gap:6px;padding:8px}.actions{flex-wrap:nowrap;gap:6px}.brand{flex:none}#aAbout{width:38px;padding:0}
+  .actions button{min-height:38px;padding:0 12px;font-size:14px}.actions .icon{width:38px;padding:0}
+  body.explore .zoom,.zoom{top:auto;bottom:12px;right:10px}.zoom button{min-height:36px}.zoom .icon{width:36px}.zoom .capbtn{font-size:14px;padding:0 12px}
+  .bank{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:96px;overflow-x:auto;padding:2px 2px 6px}
+  .tile{touch-action:pan-x}
+  .cap{display:none}
+  .datein{width:132px;font-size:14px;padding:0 10px}
+  .tl-head{flex-wrap:wrap}.tl-date{order:-1;flex-basis:100%}
+  .play #side .sidehide{display:none}
+  #prompt{top:58px}#prompt p{font-size:15px}
+  #pop{left:8px!important;right:8px;width:auto;top:auto!important;bottom:8px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="explore noside">
+<div class="load" id="loading">Unfolding the map…</div>
+<div id="app" hidden>
+  <header class="top">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="17" fill="var(--sea)"/><path d="M12 7l6 1 2 4 4 1 1 4-4 3-2 6-3 3-2-5-3-4-1-4 2-3z" fill="var(--land)" stroke="var(--coast)" stroke-width="1.2" stroke-linejoin="round"/><circle cx="17" cy="16" r="2.2" fill="var(--accent)"/></svg>
+      <div><b>Bharat</b> <span>Bhoogol</span><small>भारत भूगोल · India’s map on any date since 1950</small></div>
+    </div>
+    <div class="actions" id="actions"></div>
+    <button class="icon themebtn" id="themeBtn" aria-label="Switch theme" title="Switch between light and dark"></button>
+  </header>
+  <aside id="side" hidden></aside>
+  <main id="stage">
+    <svg id="map" role="img" aria-label="Map of India">
+      <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--land)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--hatch)" stroke-width="2"/></pattern></defs>
+      <g id="vp"><g id="units"></g><path id="borders"/><path id="pborders"/><path id="outline"/><g id="rings"></g><g id="pins"></g><g id="labels"></g></g>
+    </svg>
+    <div class="zoom"><button class="capbtn" id="zcaps" aria-pressed="false" title="Show capital cities on this date"><svg width="14" height="18" viewBox="-11 -28 22 31" aria-hidden="true"><path d="M0 2C-1-5-10-10-10-19a10 10 0 0 1 20 0C10-10 1-5 0 2z" fill="currentColor"/><circle cy="-19" r="4" fill="var(--panel)"/></svg>Capitals</button><button class="icon" id="zin" aria-label="Zoom in">+</button><button class="icon" id="zout" aria-label="Zoom out">−</button><button class="icon" id="zreset" aria-label="Reset zoom" style="font-size:15px">⟲</button></div>
+    <div id="prompt" hidden aria-live="polite"><small id="pNum"></small><p id="pText"></p><div class="nav"><button id="pPrev" aria-label="Previous prompt">‹</button><button id="pNext" aria-label="Next prompt">›</button></div></div>
+    <div id="tip" hidden></div>
+    <div id="pop" hidden role="dialog" aria-label="Piece settings">
+      <div class="pop-h"><b id="popName"></b><button class="icon" id="popClose" aria-label="Close">✕</button></div>
+      <label class="field">Prompt (optional)<textarea id="popPrompt" placeholder="Such as: Formed in 1956 by joining Travancore-Cochin with Malabar."></textarea></label>
+      <button class="link" id="popSuggest" type="button" style="justify-self:start">Use the suggested prompt</button>
+      <label class="field">Label<input id="popLabel" autocomplete="off"></label>
+      <div class="pop-f"><button id="popRemove">Remove</button><button class="primary" id="popDone">Done</button></div>
+    </div>
+    <div id="toast"></div>
+  </main>
+  <footer id="tl">
+    <div class="tl-head">
+      <button class="icon" id="evPrev" aria-label="Previous change">‹</button>
+      <div class="tl-date"><h2 id="tlDate"></h2><div id="tlTitle"></div></div>
+      <input type="date" class="datein" id="dateIn" aria-label="Pick an exact date" title="Pick an exact date">
+      <button class="icon" id="evNext" aria-label="Next change">›</button>
+    </div>
+    <p id="tlText"></p>
+    <div class="slider" id="ruler" role="slider" tabindex="0" aria-label="Date on the map" aria-valuemin="1950" aria-valuemax="2026">
+      <div class="track"><div class="fill" id="sFill"></div></div><div class="marks" id="sMarks"></div><div class="years" id="sYears"></div>
+      <div class="thumb" id="sThumb"><div class="bubble" id="sBubble"></div></div>
+    </div>
+    <div class="tl-foot"><p>Pick a date, then choose the places and capitals to practise.</p><button class="primary" id="choose">Build a quiz ›</button></div>
+  </footer>
+</div>
+<svg id="drag" aria-hidden="true"><g id="dragG"></g></svg>
+<div class="wm wl">2026 · Built with ❤️ by Shagun</div><div class="wm wr">2026 · Built with ❤️ by Shagun</div>
+<div id="tour" hidden>
+  <div class="spot" id="tSpot"></div>
+  <div class="tcard" id="tCard" role="dialog" aria-modal="true" aria-labelledby="tTitle">
+    <i class="tarrow" id="tArrow"></i>
+    <div class="tdots" id="tDots" aria-hidden="true"></div>
+    <h3 id="tTitle"></h3><p id="tText"></p>
+    <div class="tbtns"><button class="link" id="tSkip">Skip tour</button><span></span><button id="tBack">Back</button><button class="primary" id="tNext">Next</button></div>
+  </div>
+</div>
+<div id="modal" hidden><div class="card" id="card" role="dialog" aria-modal="true"></div></div>
+<script>// https://github.com/topojson/topojson-client v3.1.0 Copyright 2019 Mike Bostock
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e=e||self).topojson=e.topojson||{})}(this,function(e){"use strict";function t(e){return e}function r(e){if(null==e)return t;var r,n,o=e.scale[0],a=e.scale[1],i=e.translate[0],c=e.translate[1];return function(e,t){t||(r=n=0);var u=2,f=e.length,s=new Array(f);for(s[0]=(r+=e[0])*o+i,s[1]=(n+=e[1])*a+c;u<f;)s[u]=e[u],++u;return s}}function n(e){var t,n=r(e.transform),o=1/0,a=o,i=-o,c=-o;function u(e){(e=n(e))[0]<o&&(o=e[0]),e[0]>i&&(i=e[0]),e[1]<a&&(a=e[1]),e[1]>c&&(c=e[1])}function f(e){switch(e.type){case"GeometryCollection":e.geometries.forEach(f);break;case"Point":u(e.coordinates);break;case"MultiPoint":e.coordinates.forEach(u)}}for(t in e.arcs.forEach(function(e){for(var t,r=-1,u=e.length;++r<u;)(t=n(e[r],r))[0]<o&&(o=t[0]),t[0]>i&&(i=t[0]),t[1]<a&&(a=t[1]),t[1]>c&&(c=t[1])}),e.objects)f(e.objects[t]);return[o,a,i,c]}function o(e,t){var r=t.id,n=t.bbox,o=null==t.properties?{}:t.properties,i=a(e,t);return null==r&&null==n?{type:"Feature",properties:o,geometry:i}:null==n?{type:"Feature",id:r,properties:o,geometry:i}:{type:"Feature",id:r,bbox:n,properties:o,geometry:i}}function a(e,t){var n=r(e.transform),o=e.arcs;function a(e,t){t.length&&t.pop();for(var r=o[e<0?~e:e],a=0,i=r.length;a<i;++a)t.push(n(r[a],a));e<0&&function(e,t){for(var r,n=e.length,o=n-t;o<--n;)r=e[o],e[o++]=e[n],e[n]=r}(t,i)}function i(e){return n(e)}function c(e){for(var t=[],r=0,n=e.length;r<n;++r)a(e[r],t);return t.length<2&&t.push(t[0]),t}function u(e){for(var t=c(e);t.length<4;)t.push(t[0]);return t}function f(e){return e.map(u)}return function e(t){var r,n=t.type;switch(n){case"GeometryCollection":return{type:n,geometries:t.geometries.map(e)};case"Point":r=i(t.coordinates);break;case"MultiPoint":r=t.coordinates.map(i);break;case"LineString":r=c(t.arcs);break;case"MultiLineString":r=t.arcs.map(c);break;case"Polygon":r=f(t.arcs);break;case"MultiPolygon":r=t.arcs.map(f);break;default:return null}return{type:n,coordinates:r}}(t)}function i(e,t){var r={},n={},o={},a=[],i=-1;function c(e,t){for(var n in e){var o=e[n];delete t[o.start],delete o.start,delete o.end,o.forEach(function(e){r[e<0?~e:e]=1}),a.push(o)}}return t.forEach(function(r,n){var o,a=e.arcs[r<0?~r:r];a.length<3&&!a[1][0]&&!a[1][1]&&(o=t[++i],t[i]=r,t[n]=o)}),t.forEach(function(t){var r,a,i=function(t){var r,n=e.arcs[t<0?~t:t],o=n[0];e.transform?(r=[0,0],n.forEach(function(e){r[0]+=e[0],r[1]+=e[1]})):r=n[n.length-1];return t<0?[r,o]:[o,r]}(t),c=i[0],u=i[1];if(r=o[c])if(delete o[r.end],r.push(t),r.end=u,a=n[u]){delete n[a.start];var f=a===r?r:r.concat(a);n[f.start=r.start]=o[f.end=a.end]=f}else n[r.start]=o[r.end]=r;else if(r=n[u])if(delete n[r.start],r.unshift(t),r.start=c,a=o[c]){delete o[a.end];var s=a===r?r:a.concat(r);n[s.start=a.start]=o[s.end=r.end]=s}else n[r.start]=o[r.end]=r;else n[(r=[t]).start=c]=o[r.end=u]=r}),c(o,n),c(n,o),t.forEach(function(e){r[e<0?~e:e]||a.push([e])}),a}function c(e,t,r){var n,o,a;if(arguments.length>1)n=function(e,t,r){var n,o=[],a=[];function i(e){var t=e<0?~e:e;(a[t]||(a[t]=[])).push({i:e,g:n})}function c(e){e.forEach(i)}function u(e){e.forEach(c)}return function e(t){switch(n=t,t.type){case"GeometryCollection":t.geometries.forEach(e);break;case"LineString":c(t.arcs);break;case"MultiLineString":case"Polygon":u(t.arcs);break;case"MultiPolygon":!function(e){e.forEach(u)}(t.arcs)}}(t),a.forEach(null==r?function(e){o.push(e[0].i)}:function(e){r(e[0].g,e[e.length-1].g)&&o.push(e[0].i)}),o}(0,t,r);else for(o=0,n=new Array(a=e.arcs.length);o<a;++o)n[o]=o;return{type:"MultiLineString",arcs:i(e,n)}}function u(e,t){var r={},n=[],o=[];function c(e){e.forEach(function(t){t.forEach(function(t){(r[t=t<0?~t:t]||(r[t]=[])).push(e)})}),n.push(e)}function u(t){return function(e){for(var t,r=-1,n=e.length,o=e[n-1],a=0;++r<n;)t=o,o=e[r],a+=t[0]*o[1]-t[1]*o[0];return Math.abs(a)}(a(e,{type:"Polygon",arcs:[t]}).coordinates[0])}return t.forEach(function e(t){switch(t.type){case"GeometryCollection":t.geometries.forEach(e);break;case"Polygon":c(t.arcs);break;case"MultiPolygon":t.arcs.forEach(c)}}),n.forEach(function(e){if(!e._){var t=[],n=[e];for(e._=1,o.push(t);e=n.pop();)t.push(e),e.forEach(function(e){e.forEach(function(e){r[e<0?~e:e].forEach(function(e){e._||(e._=1,n.push(e))})})})}}),n.forEach(function(e){delete e._}),{type:"MultiPolygon",arcs:o.map(function(t){var n,o=[];if(t.forEach(function(e){e.forEach(function(e){e.forEach(function(e){r[e<0?~e:e].length<2&&o.push(e)})})}),(n=(o=i(e,o)).length)>1)for(var a,c,f=1,s=u(o[0]);f<n;++f)(a=u(o[f]))>s&&(c=o[0],o[0]=o[f],o[f]=c,s=a);return o}).filter(function(e){return e.length>0})}}function f(e,t){for(var r=0,n=e.length;r<n;){var o=r+n>>>1;e[o]<t?r=o+1:n=o}return r}function s(e){if(null==e)return t;var r,n,o=e.scale[0],a=e.scale[1],i=e.translate[0],c=e.translate[1];return function(e,t){t||(r=n=0);var u=2,f=e.length,s=new Array(f),l=Math.round((e[0]-i)/o),h=Math.round((e[1]-c)/a);for(s[0]=l-r,r=l,s[1]=h-n,n=h;u<f;)s[u]=e[u],++u;return s}}e.bbox=n,e.feature=function(e,t){return"string"==typeof t&&(t=e.objects[t]),"GeometryCollection"===t.type?{type:"FeatureCollection",features:t.geometries.map(function(t){return o(e,t)})}:o(e,t)},e.merge=function(e){return a(e,u.apply(this,arguments))},e.mergeArcs=u,e.mesh=function(e){return a(e,c.apply(this,arguments))},e.meshArcs=c,e.neighbors=function(e){var t={},r=e.map(function(){return[]});function n(e,r){e.forEach(function(e){e<0&&(e=~e);var n=t[e];n?n.push(r):t[e]=[r]})}function o(e,t){e.forEach(function(e){n(e,t)})}var a={LineString:n,MultiLineString:o,Polygon:o,MultiPolygon:function(e,t){e.forEach(function(e){o(e,t)})}};for(var i in e.forEach(function e(t,r){"GeometryCollection"===t.type?t.geometries.forEach(function(t){e(t,r)}):t.type in a&&a[t.type](t.arcs,r)}),t)for(var c=t[i],u=c.length,s=0;s<u;++s)for(var l=s+1;l<u;++l){var h,p=c[s],g=c[l];(h=r[p])[i=f(h,g)]!==g&&h.splice(i,0,g),(h=r[g])[i=f(h,p)]!==p&&h.splice(i,0,p)}return r},e.quantize=function(e,t){if(e.transform)throw new Error("already quantized");if(t&&t.scale)u=e.bbox;else{if(!((r=Math.floor(t))>=2))throw new Error("n must be ≥2");var r,o=(u=e.bbox||n(e))[0],a=u[1],i=u[2],c=u[3];t={scale:[i-o?(i-o)/(r-1):1,c-a?(c-a)/(r-1):1],translate:[o,a]}}var u,f,l=s(t),h=e.objects,p={};function g(e){return l(e)}function y(e){var t;switch(e.type){case"GeometryCollection":t={type:"GeometryCollection",geometries:e.geometries.map(y)};break;case"Point":t={type:"Point",coordinates:g(e.coordinates)};break;case"MultiPoint":t={type:"MultiPoint",coordinates:e.coordinates.map(g)};break;default:return e}return null!=e.id&&(t.id=e.id),null!=e.bbox&&(t.bbox=e.bbox),null!=e.properties&&(t.properties=e.properties),t}for(f in h)p[f]=y(h[f]);return{type:"Topology",bbox:u,transform:t,objects:p,arcs:e.arcs.map(function(e){var t,r=0,n=1,o=e.length,a=new Array(o);for(a[0]=l(e[0],0);++r<o;)((t=l(e[r],r))[0]||t[1])&&(a[n++]=t);return 1===n&&(a[n++]=[0,0]),a.length=n,a})}},e.transform=r,e.untransform=s,Object.defineProperty(e,"__esModule",{value:!0})});
+</script>
+<script>
+{
+const $ = s => document.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const now = new Date();
+const TODAY = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+const MIN_DATE = '1950-01-26';
+const fmt = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric', timeZone:'UTC'});
+const dayNum = d => Date.parse(d + 'T00:00:00Z') / 864e5;
+const dayStr = n => new Date(n * 864e5).toISOString().slice(0, 10);
+const store = {get(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}, set(k,v){try{localStorage.setItem(k, JSON.stringify(v))}catch{}}};
+
+let TOPO, OBJ, GEOMS, ERAS, META, OUTLINE = '';
+const S = {mode:'explore', date:TODAY, era:null, pieces:[], title:'', names:true, borders:true, qm:0, caps:false, undo:[], redo:[], play:null, from:null};
+const V = {s:1, x:0, y:0};
+const svg = $('#map'), vp = $('#vp');
+const root = document.documentElement, darkMQ = matchMedia('(prefers-color-scheme: dark)');
+const themeNow = () => root.dataset.theme === 'dark' || root.dataset.theme === 'light' ? root.dataset.theme : darkMQ.matches ? 'dark' : 'light';
+const SUN = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6L16 16M4 16l1.4-1.4M14.6 5.4L16 4"/></g></svg>';
+const MOON = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 12.8A6.5 6.5 0 0 1 7.2 4.5a6.5 6.5 0 1 0 8.3 8.3z" fill="currentColor"/></svg>';
+function themeIcon(){ const t = themeNow(), b = $('#themeBtn'); b.innerHTML = t === 'dark' ? SUN : MOON; b.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
+try { const t = localStorage.getItem('bb-theme'); if (t === 'dark' || t === 'light') root.dataset.theme = t; } catch {}
+$('#themeBtn').onclick = () => { const t = themeNow() === 'dark' ? 'light' : 'dark'; root.dataset.theme = t; try { localStorage.setItem('bb-theme', t); } catch {} themeIcon(); };
+darkMQ.addEventListener('change', themeIcon);
+new MutationObserver(themeIcon).observe(root, {attributes:true, attributeFilter:['data-theme']});
+themeIcon();
+// green tick cursor, drawn once as a PNG so every browser (Safari included) can use it
+try {
+  const tick = d => { const c = document.createElement('canvas'); c.width = c.height = 32 * d; const g = c.getContext('2d'); g.scale(d, d);
+    g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = 3; g.shadowOffsetY = 1;
+    g.fillStyle = '#34c759'; g.beginPath(); g.arc(16, 16, 11, 0, 7); g.fill();
+    g.shadowColor = 'transparent'; g.lineWidth = 2; g.strokeStyle = '#fff'; g.stroke();
+    g.lineWidth = 2.6; g.lineCap = g.lineJoin = 'round'; g.beginPath(); g.moveTo(11, 16.5); g.lineTo(14.6, 20); g.lineTo(21, 12.5); g.stroke();
+    return c.toDataURL('image/png'); };
+  const u1 = tick(1), hi = `image-set(url(${u1}) 1x, url(${tick(2)}) 2x) 16 16, copy`;
+  root.style.setProperty('--okcur', CSS.supports('cursor', hi) ? hi : `url(${u1}) 16 16, copy`);
+} catch {}
+
+/* ---------- geometry ---------- */
+const P = (x, y) => [((x - META.minx) * META.K).toFixed(1), ((META.maxy - y) * META.K).toFixed(1)];
+function ringPath(r){ let s = ''; for (let i = 0; i < r.length; i++){ const [x, y] = P(r[i][0], r[i][1]); s += (i ? 'L' : 'M') + x + ',' + y; } return s; }
+function polyPath(g){ const ps = g.type === 'Polygon' ? [g.coordinates] : g.coordinates; return ps.map(p => p.map(r => ringPath(r) + 'Z').join('')).join(''); }
+function linePath(g){ return g.coordinates.map(ringPath).join(''); }
+const GC = new Map();
+function partsOf(g){
+  const ps = g.type === 'Polygon' ? [g.coordinates] : g.coordinates;
+  return ps.map(p => { let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for (const c of p[0]){ const [x, y] = P(c[0], c[1]).map(Number); x0=Math.min(x0,x); x1=Math.max(x1,x); y0=Math.min(y0,y); y1=Math.max(y1,y);} return {x:(x0+x1)/2, y:(y0+y1)/2, h:Math.hypot(x1-x0, y1-y0)/2}; });
+}
+function rings(u, parts){
+  if (u.a > 600) return [];
+  const group = (pts, thr) => {
+    const cl = [];
+    for (const p of pts){ const c = cl.find(c => Math.hypot(c.x - p.x, c.y - p.y) < thr); if (c) c.pts.push(p); else cl.push({x:p.x, y:p.y, pts:[p]}); }
+    return cl.flatMap(c => { const xs = c.pts.map(p => p.x), ys = c.pts.map(p => p.y); const x = (Math.min(...xs)+Math.max(...xs))/2, y = (Math.min(...ys)+Math.max(...ys))/2;
+      const e = Math.max(...c.pts.map(p => Math.hypot(p.x - x, p.y - y) + p.h));
+      return e <= 18 || c.pts.length === 1 ? [{x, y, e}] : thr > 14 ? group(c.pts, 14) : c.pts.map(p => ({x:p.x, y:p.y, e:p.h})); });
+  };
+  return group(parts, 60);
+}
+const rr = (e, k) => Math.max(e + 5 / k, 9 / k);
+function units(era){
+  if (era._u) return era._u;
+  const groups = era.units.map(() => []);
+  for (let i = 0; i < GEOMS.length; i++) groups[era.a.charCodeAt(i) - 48].push(i);
+  era._u = era.units.map((u, j) => {
+    const sig = groups[j].join(',');
+    let g = GC.get(sig);
+    if (!g){ const m = topojson.merge(TOPO, groups[j].map(i => GEOMS[i])); const parts = partsOf(m); g = {d:polyPath(m), parts}; GC.set(sig, g); }
+    const [x0, y0, x1, y1] = u.bb;
+    return Object.assign({}, u, {j, path:g.d, rings:rings(u, g.parts), tol:clamp(0.32 * Math.sqrt((x1-x0)*(y1-y0)), 14, 52), foreign:/Portuguese|French|Protectorate/.test(u.t)});
+  });
+  era._k = Object.fromEntries(era._u.map(u => [u.k, u]));
+  return era._u;
+}
+const unitOf = (era, gi) => era.a.charCodeAt(gi) - 48;
+function mesh(era, filter){ return linePath(topojson.mesh(TOPO, OBJ, filter)); }
+function eraBorders(era){ if (!era._b) era._b = mesh(era, (a, b) => a !== b && unitOf(era, a._i) !== unitOf(era, b._i)); return era._b; }
+const eraFor = d => { let e = ERAS[0]; for (const x of ERAS) if (x.d <= d) e = x; return e; };
+
+/* ---------- capitals ---------- */
+let CAPS = null;
+const cityName = (c, d) => { let n = c.names[0][1]; for (const [f, nm] of c.names) if (f <= d) n = nm; return n; };
+const yr = d => d.slice(0, 4);
+function capsAt(era, d){
+  const key = era.d + '|' + d;
+  if (era._capKey === key) return era._caps;
+  units(era);
+  const by = new Map();
+  for (const e of CAPS.entries){
+    if (e.u !== '_india' && !era._k[e.u]) continue;
+    if ((e.f && d < e.f) || (e.t && d >= e.t)) continue;
+    const c = CAPS.cities[e.c];
+    if (!by.has(e.c)){
+      const past = c.names.filter(([f]) => f <= d), later = c.names.filter(([f]) => f > d);
+      by.set(e.c, {id:e.c, x:c.x, y:c.y, name:cityName(c, d), was:past.slice(0, -1), later, note:c.note, roles:[]});
+    }
+    by.get(e.c).roles.push(e);
+  }
+  era._capKey = key; era._caps = [...by.values()];
+  return era._caps;
+}
+const unitName = k => k === '_india' ? 'India' : (S.mode === 'play' && S.play && S.play.cfg.labels[k]) || (S.era._k[k] ? S.era._k[k].n : k);
+function roleText(cap, keys){
+  const g = new Map();
+  for (const r of cap.roles){ if (keys && !keys.has(r.u) && r.u !== '_india') continue; if (!g.has(r.r)) g.set(r.r, []); g.get(r.r).push(unitName(r.u)); }
+  return [...g].map(([r, us]) => `${r[0].toUpperCase() + r.slice(1)} of ${us.join(' and ')}`).join(' · ');
+}
+function capNotes(cap){
+  const out = [];
+  for (const r of cap.roles){ if (r.f) out.push(`${r.r[0].toUpperCase() + r.r.slice(1)} since ${yr(r.f)}.`); if (r.n) out.push(r.n); }
+  if (cap.was.length){ const c = CAPS.cities[cap.id]; const cur = c.names.filter(([f]) => f <= S.date).at(-1); out.push(`Called ${cap.was.map(w => w[1]).join(', ')} until ${yr(cur[0])}.`); }
+  if (cap.later.length) out.push(`Renamed ${cap.later.map(([f, n]) => `${n} in ${yr(f)}`).join(', ')}.`);
+  if (cap.note) out.push(cap.note);
+  return [...new Set(out)];
+}
+const star = (x, y, R) => { let d = ''; for (let i = 0; i < 10; i++){ const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? R * 0.45 : R; d += (i ? 'L' : 'M') + (x + r * Math.cos(a)).toFixed(2) + ',' + (y + r * Math.sin(a)).toFixed(2); } return d + 'Z'; };
+function pinList(){
+  if (!CAPS || !S.era) return [];
+  if (S.mode === 'play') return S.play.pins.filter(c => S.play.placedPins.has(c.id));
+  const all = capsAt(S.era, S.date);
+  if (S.caps) return all;
+  if (S.mode === 'choose' && S.qm){ const ks = new Set(S.pieces.map(p => p.k)); return all.filter(c => c.roles.some(r => ks.has(r.u))); }
+  return [];
+}
+function pinAt(e){
+  const t = document.elementFromPoint(e.clientX, e.clientY);
+  const el = t && t.closest && t.closest('[data-pin]');
+  if (!el || !svg.contains(el)) return null;
+  return pinList().find(c => c.id === el.dataset.pin) || null;
+}
+function showPinTip(e, c){
+  const keys = S.mode === 'play' ? S.play.keys : null;
+  const notes = S.mode === 'play' ? [] : capNotes(c);
+  placeTip(e, `<b>${esc(c.name)}</b><i>${esc(roleText(c, keys))}</i>${notes.length ? `<p>${notes.map(esc).join(' ')}</p>` : ''}`);
+}
+function capBtn(){ const b = $('#zcaps'); if (!b) return; b.classList.toggle('on', S.caps); b.setAttribute('aria-pressed', S.caps ? 'true' : 'false'); }
+
+/* ---------- view (zoom & pan) ---------- */
+// Screen <-> SVG mapping computed from the element's box and viewBox (preserveAspectRatio xMidYMid meet).
+// Safari's getScreenCTM() is wrong inside scrolled containers, which made dragged pieces drift from the pointer.
+function boxCTM(el){
+  const r = el.getBoundingClientRect(), vb = el.viewBox && el.viewBox.baseVal;
+  if (!vb || !vb.width || !r.width) return null;
+  const a = Math.min(r.width / vb.width, r.height / vb.height);
+  return {a, d:a, e:r.left + (r.width - vb.width * a) / 2 - vb.x * a, f:r.top + (r.height - vb.height * a) / 2 - vb.y * a};
+}
+function rootPt(cx, cy){ const m = boxCTM(svg); return {x:(cx - m.e) / m.a, y:(cy - m.f) / m.d}; }
+function mapPt(cx, cy){ const p = rootPt(cx, cy); return {x:(p.x - V.x) / V.s, y:(p.y - V.y) / V.s}; }
+function screenOf(x, y){ const m = boxCTM(svg); const rx = x * V.s + V.x, ry = y * V.s + V.y; return {x: m.a * rx + m.e, y: m.d * ry + m.f}; }
+const pxPerUnit = () => { const m = boxCTM(svg); return m ? m.a * V.s : 0; };
+let labelRaf = 0;
+function applyView(){
+  vp.setAttribute('transform', `translate(${V.x.toFixed(2)},${V.y.toFixed(2)}) scale(${V.s.toFixed(4)})`);
+  cancelAnimationFrame(labelRaf); labelRaf = requestAnimationFrame(drawLabels);
+}
+function zoomAt(rx, ry, f){
+  const ns = clamp(V.s * f, 1, 16); const k = ns / V.s;
+  V.x = rx - (rx - V.x) * k; V.y = ry - (ry - V.y) * k; V.s = ns; clampView(); applyView();
+}
+function clampView(){ const W = META.W, H = META.H; V.x = clamp(V.x, W - W * V.s - W * .3, W * .3); V.y = clamp(V.y, H - H * V.s - H * .3, H * .3); if (V.s === 1){ V.x = 0; V.y = 0; } }
+function resetView(){ V.s = 1; V.x = 0; V.y = 0; applyView(); }
+const mid = () => { const r = svg.getBoundingClientRect(); return rootPt(r.left + r.width / 2, r.top + r.height / 2); };
+$('#zin').onclick = () => { const c = mid(); zoomAt(c.x, c.y, 1.6); };
+$('#zout').onclick = () => { const c = mid(); zoomAt(c.x, c.y, 1 / 1.6); };
+$('#zreset').onclick = resetView;
+$('#zcaps').onclick = () => { S.caps = !S.caps; capBtn(); save(); drawLabels(); hideTip(); };
+svg.addEventListener('wheel', e => { e.preventDefault(); const p = rootPt(e.clientX, e.clientY); zoomAt(p.x, p.y, Math.exp(-e.deltaY * 0.0018)); }, {passive:false});
+
+/* pointer: pan, pinch, click */
+const ptrs = new Map(); let gest = null;
+svg.addEventListener('pointerdown', e => {
+  if (drag) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  svg.setPointerCapture(e.pointerId);
+  if (ptrs.size === 1) gest = {x0:e.clientX, y0:e.clientY, vx:V.x, vy:V.y, moved:false, target:e.target};
+  else if (ptrs.size === 2){ const [a, b] = [...ptrs.values()]; gest = {pinch:true, d0:Math.hypot(a.x-b.x, a.y-b.y), s0:V.s, moved:true}; }
+});
+svg.addEventListener('pointermove', e => {
+  if (!ptrs.has(e.pointerId)){ hover(e); return; }
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (!gest) return;
+  if (gest.pinch && ptrs.size === 2){
+    const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x-b.x, a.y-b.y); const m = rootPt((a.x+b.x)/2, (a.y+b.y)/2);
+    zoomAt(m.x, m.y, (gest.s0 * d / gest.d0) / V.s); return;
+  }
+  const dx = e.clientX - gest.x0, dy = e.clientY - gest.y0;
+  if (!gest.moved && Math.hypot(dx, dy) > 5) gest.moved = true;
+  if (gest.moved && V.s > 1){ const m = boxCTM(svg); V.x = gest.vx + dx / m.a; V.y = gest.vy + dy / m.d; clampView(); applyView(); hideTip(); }
+});
+const endPtr = e => {
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.delete(e.pointerId);
+  if (gest && !gest.moved && !gest.pinch && e.type === 'pointerup') mapClick(e);
+  if (ptrs.size === 0) gest = null;
+};
+svg.addEventListener('pointerup', endPtr); svg.addEventListener('pointercancel', endPtr);
+svg.addEventListener('pointerleave', () => { if (!ptrs.size) { setHover(null); hideTip(); } });
+
+function unitAt(e){
+  for (const t of document.elementsFromPoint(e.clientX, e.clientY)){
+    if (!svg.contains(t)) continue;
+    const el = t.closest && t.closest('[data-k]');
+    if (el) return S.era._k[el.dataset.k];
+  }
+  return null;
+}
+let hovK = null;
+function setHover(k){
+  if (hovK === k) return;
+  if (hovK){ const el = $(`#units [data-k="${hovK}"]`); el && el.classList.remove('hov'); }
+  hovK = k;
+  if (k){ const el = $(`#units [data-k="${k}"]`); el && !el.classList.contains('on') && el.classList.add('hov'); }
+}
+function hover(e){
+  if (e.pointerType === 'touch') return;
+  if (drag){ hideTip(); return; }
+  const c = pinAt(e);
+  if (c){ setHover(null); showPinTip(e, c); return; }
+  const u = unitAt(e);
+  if (S.mode === 'play'){ setHover(null); const pl = S.play; if (u && pl.placed.has(u.k) && !(pl.pre && !pl.cfg.n)) showTip(e, u, true); else if (u && u.foreign && !pl.keys.has(u.k)) showTip(e, u, true); else hideTip(); return; }
+  setHover(u ? u.k : null);
+  u ? showTip(e, u) : hideTip();
+}
+function showTip(e, u, short){
+  const lab = S.mode === 'play' ? (S.play.cfg.labels[u.k] || u.n) : u.n;
+  const caps = !short && CAPS ? capsAt(S.era, S.date).filter(c => c.roles.some(r => r.u === u.k)) : [];
+  const capLine = caps.length ? `<p>${caps.map(c => esc(c.roles.filter(r => r.u === u.k).map(r => r.r[0].toUpperCase() + r.r.slice(1)).join(', ') + ': ' + c.name)).join(' · ')}</p>` : '';
+  placeTip(e, `<b>${esc(lab)}</b><i>${esc(u.t)}</i>${!short && u.note ? `<p>${esc(u.note)}</p>` : ''}${capLine}`);
+}
+function placeTip(e, html){
+  const tip = $('#tip'), r = $('#stage').getBoundingClientRect();
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = e.clientX - r.left + 14, y = e.clientY - r.top + 14;
+  if (x + w > r.width - 8) x = e.clientX - r.left - w - 14;
+  if (y + h > r.height - 8) y = e.clientY - r.top - h - 14;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+function hideTip(){ $('#tip').hidden = true; }
+
+function mapClick(e){
+  if (S.mode === 'explore'){ const c = pinAt(e); if (c){ showPinTip(e, c); return; } }
+  const u = unitAt(e);
+  if (S.mode === 'explore'){ if (u){ showTip(e, u); } return; }
+  if (S.mode === 'choose'){
+    if (!u){ closePop(); return; }
+    const i = S.pieces.findIndex(p => p.k === u.k);
+    if (i < 0){ snap(); S.pieces.push({k:u.k, label:'', prompt:''}); changed(); openPop(u.k, e); }
+    else openPop(u.k, e);
+    return;
+  }
+  if (S.mode === 'play' && S.play.sel){ const t = S.play.sel, pt = mapPt(e.clientX, e.clientY); t[0] === 'c' ? tryPin(t.slice(2), pt, true) : tryPlace(t.slice(2), pt, true); }
+}
+
+/* ---------- drawing ---------- */
+function drawMap(){
+  const era = S.era, us = units(era);
+  const play = S.mode === 'play';
+  const on = k => play ? S.play.placed.has(k) : S.mode === 'choose' && S.pieces.some(p => p.k === k);
+  $('#units').innerHTML = us.map(u => {
+    const cls = ['u']; if (on(u.k)) cls.push('on', 'c' + u.c); else if (u.foreign) cls.push('foreign');
+    return `<path data-k="${u.k}" class="${cls.join(' ')}" d="${u.path}"/>`;
+  }).join('');
+  const kk = pxPerUnit() || 1;
+  $('#rings').innerHTML = us.flatMap(u => u.rings.map(r => `<circle data-k="${u.k}" data-e="${r.e.toFixed(2)}" class="ring${on(u.k) ? ' on' : ''}" cx="${r.x.toFixed(1)}" cy="${r.y.toFixed(1)}" r="${rr(r.e, kk).toFixed(2)}"/>`)).join('');
+  const showB = !play || S.play.cfg.borders;
+  $('#borders').setAttribute('d', showB ? eraBorders(era) : '');
+  if (play && !S.play.cfg.borders){
+    const pl = S.play.placed, us2 = era._u;
+    $('#pborders').setAttribute('d', pl.size ? mesh(era, (a, b) => { if (a === b) return false; const ua = unitOf(era, a._i), ub = unitOf(era, b._i); return ua !== ub && (pl.has(us2[ua].k) || pl.has(us2[ub].k)); }) : '');
+  } else $('#pborders').setAttribute('d', '');
+  $('#outline').setAttribute('d', OUTLINE);
+  svg.classList.toggle('play', play);
+  drawLabels();
+}
+function labelList(){
+  const us = units(S.era);
+  if (S.mode === 'choose'){ const L = S.pieces.map(p => ({u:S.era._k[p.k], t:p.label || S.era._k[p.k].n, pri:2})); for (const u of us) if (!S.pieces.some(p => p.k === u.k)) L.push({u, t:u.n, dim:!u.foreign, ctx:u.foreign}); return L; }
+  if (S.mode === 'play'){
+    const L = S.play.pre && !S.play.cfg.n ? [] : [...S.play.placed].map(k => ({u:S.era._k[k], t:S.play.cfg.labels[k] || S.era._k[k].n, pri:2}));
+    for (const u of us) if (u.foreign && !S.play.keys.has(u.k)) L.push({u, t:u.n, ctx:true});
+    return L;
+  }
+  return us.map(u => ({u, t:u.n, ctx:u.foreign, dim:!u.foreign}));
+}
+function drawLabels(){
+  if (!S.era) return;
+  const k = pxPerUnit(); if (!k) return;
+  const fs = (window.innerWidth < 760 ? 11 : 12.5) / k, sw = 3 / k;
+  for (const c of document.querySelectorAll('#rings circle')) c.setAttribute('r', rr(+c.dataset.e, k).toFixed(2));
+  const pins = pinList();
+  $('#pins').innerHTML = pins.map(c => {
+    const nat = c.roles.some(r => r.u === '_india'), main = nat || c.roles.some(r => r.r === 'capital');
+    const mark = nat ? `<path class="pn" d="${star(c.x, c.y, 7.5 / k)}"/>` : `<circle class="${main ? 'pm' : 'ps'}" cx="${c.x}" cy="${c.y}" r="${(3.6 / k).toFixed(3)}"/>`;
+    return `<g data-pin="${c.id}">${mark}<circle class="hit" cx="${c.x}" cy="${c.y}" r="${(11 / k).toFixed(3)}"/></g>`;
+  }).join('');
+  const L = labelList().filter(l => l.u).sort((a, b) => ((b.pri || 1) - (a.pri || 1)) || ((b.u.rings.length ? 1e9 : b.u.a) - (a.u.rings.length ? 1e9 : a.u.a)));
+  const boxes = pins.map(c => ({x0:c.x - 5 / k, x1:c.x + 5 / k, y0:c.y - 5 / k, y1:c.y + 5 / k})), out = [];
+  const cfs = fs * 0.9;
+  const hit = (b, o) => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0;
+  for (const c of pins.slice().sort((a, b) => b.roles.some(r => r.u === '_india') - a.roles.some(r => r.u === '_india'))){
+    const w = c.name.length * cfs * 0.5, h = cfs * 1.1, g = 7 / k, m = 3 / k;
+    const cands = [[c.x + g, c.y, 'start'], [c.x - g, c.y, 'end'], [c.x, c.y - g - h / 2, 'middle'], [c.x, c.y + g + h / 2, 'middle']].map(([x, y, an]) => {
+      const x0 = an === 'start' ? x : an === 'end' ? x - w : x - w / 2; return {x, y, an, b:{x0, x1:x0 + w, y0:y - h / 2, y1:y + h / 2}}; });
+    let pick = cands.find(({b}) => !boxes.slice(pins.length).some(o => hit(b, o)) && !pins.some(o => o !== c && o.x > b.x0 - m && o.x < b.x1 + m && o.y > b.y0 - m && o.y < b.y1 + m));
+    if (!pick && S.mode === 'play') pick = cands[0];
+    if (!pick) continue;
+    boxes.push(pick.b);
+    out.push(`<text class="city" x="${pick.x.toFixed(1)}" y="${pick.y.toFixed(1)}" dy=".35em" text-anchor="${pick.an}" font-size="${cfs.toFixed(3)}">${esc(c.name)}</text>`);
+  }
+  for (const l of L){
+    const u = l.u; let x = u.lp[0], y = u.lp[1], anchor = 'middle';
+    if (u.rings.length){ const r = u.rings.reduce((a, b) => Math.hypot(a.x - u.lp[0], a.y - u.lp[1]) <= Math.hypot(b.x - u.lp[0], b.y - u.lp[1]) ? a : b); x = r.x + rr(r.e, k) + 3 / k; y = r.y; anchor = 'start'; }
+    const w = l.t.length * fs * 0.52, h = fs * 1.1;
+    const bx = anchor === 'start' ? x : x - w / 2, b = {x0:bx, x1:bx + w, y0:y - h / 2, y1:y + h / 2};
+    if (!u.rings.length && (u.bb[2] - u.bb[0]) < w * 0.55 && L.length > 3) continue;
+    if (boxes.some(o => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0)) continue;
+    boxes.push(b);
+    out.push(`<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" dy=".35em" text-anchor="${anchor}"${l.ctx ? ' class="ctx"' : l.dim ? ' class="dim"' : ''}>${esc(l.t)}</text>`);
+  }
+  const g = $('#labels'); g.setAttribute('font-size', fs.toFixed(3)); g.setAttribute('stroke-width', sw.toFixed(3)); g.innerHTML = out.join('');
+}
+
+/* ---------- timeline ---------- */
+const ruler = $('#ruler');
+const D0 = dayNum(MIN_DATE), D1 = dayNum(TODAY);
+const tOf = d => clamp((dayNum(d) - D0) / (D1 - D0), 0, 1);
+const posOf = t => `calc(14px + ${t.toFixed(5)} * (100% - 28px))`;
+const shortDate = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric', timeZone:'UTC'});
+let rulerW = 0;
+function drawRuler(){
+  const W = ruler.clientWidth; if (!W) return;
+  if (W !== rulerW || !$('#sMarks').childElementCount){
+    rulerW = W;
+    $('#sMarks').innerHTML = ERAS.map(e => `<i data-d="${e.d}" style="left:${posOf(tOf(e.d))}"></i>`).join('');
+    const step = W < 520 ? 20 : 10; let yh = '';
+    for (let y = 1950; y <= +TODAY.slice(0, 4); y += step) yh += `<span style="left:${posOf(tOf(y === 1950 ? MIN_DATE : y + '-01-01'))}">${y}</span>`;
+    $('#sYears').innerHTML = yh;
+  }
+  const t = tOf(S.date);
+  $('#sFill').style.width = (t * 100).toFixed(4) + '%';
+  $('#sThumb').style.left = posOf(t);
+  $('#sBubble').textContent = shortDate(S.date);
+  for (const i of $('#sMarks').children) i.classList.toggle('done', i.dataset.d <= S.date);
+  ruler.setAttribute('aria-valuenow', S.date.slice(0, 4)); ruler.setAttribute('aria-valuetext', fmt(S.date) + ': ' + S.era.title);
+}
+let lastSnap = null;
+function rulerDate(cx){
+  const r = ruler.getBoundingClientRect(), w = r.width - 28;
+  const t = clamp((cx - r.left - 14) / w, 0, 1);
+  let d = dayStr(Math.round(D0 + t * (D1 - D0))), hit = null;
+  for (const e of ERAS){ if (Math.abs(tOf(e.d) * w - (cx - r.left - 14)) < 7) hit = e.d; }
+  if (hit){ d = hit; if (hit !== lastSnap && navigator.vibrate) try { navigator.vibrate(6); } catch {} }
+  lastSnap = hit;
+  if (cx - r.left > r.width - 18) d = TODAY;
+  return d;
+}
+let rdrag = false;
+ruler.addEventListener('pointerdown', e => { rdrag = true; ruler.setPointerCapture(e.pointerId); const d = rulerDate(e.clientX); requestAnimationFrame(() => ruler.classList.add('drag')); setDate(d); });
+ruler.addEventListener('pointermove', e => { if (rdrag) setDate(rulerDate(e.clientX)); });
+const rEnd = () => { rdrag = false; ruler.classList.remove('drag'); };
+ruler.addEventListener('pointerup', rEnd); ruler.addEventListener('pointercancel', rEnd);
+ruler.addEventListener('keydown', e => {
+  const i = ERAS.indexOf(S.era), y = +S.date.slice(0, 4);
+  let d = null;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowUp') d = e.shiftKey ? `${y + 1}${S.date.slice(4)}` : (i < ERAS.length - 1 ? ERAS[i + 1].d : TODAY);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') d = e.shiftKey ? `${y - 1}${S.date.slice(4)}` : (S.date > S.era.d ? S.era.d : ERAS[Math.max(0, i - 1)].d);
+  if (e.key === 'Home') d = MIN_DATE; if (e.key === 'End') d = TODAY;
+  if (d){ e.preventDefault(); setDate(d); }
+});
+$('#evPrev').onclick = () => { const i = ERAS.indexOf(S.era); const tgt = S.date > S.era.d ? S.era : ERAS[Math.max(0, i - 1)]; setDate(tgt.d); };
+$('#evNext').onclick = () => { const i = ERAS.indexOf(S.era); if (i < ERAS.length - 1) setDate(ERAS[i + 1].d); else setDate(TODAY); };
+const dateIn = $('#dateIn'); dateIn.min = MIN_DATE; dateIn.max = TODAY;
+dateIn.onchange = () => { if (/^\d{4}-\d\d-\d\d$/.test(dateIn.value)) setDate(dateIn.value); };
+function drawTimeline(){
+  $('#tlDate').innerHTML = esc(fmt(S.date)) + (S.date === TODAY ? '<span class="chip">Today</span>' : '');
+  $('#tlTitle').textContent = (S.date === S.era.d ? '' : 'In force since ' + fmt(S.era.d) + ': ') + S.era.title;
+  $('#tlText').textContent = S.era.text;
+  dateIn.value = S.date;
+  drawRuler();
+}
+function setDate(d){
+  if (!/^\d{4}-\d\d-\d\d$/.test(d)) return;
+  if (isNaN(dayNum(d))) d = d.slice(0, 8) + '28'; else d = dayStr(dayNum(d));
+  d = d < MIN_DATE ? MIN_DATE : d > TODAY ? TODAY : d;
+  const era = eraFor(d), same = era === S.era;
+  S.date = d; S.era = era;
+  if (!same){ hideTip(); hovK = null; drawMap(); }
+  drawTimeline(); save();
+}
+
+/* ---------- modes ---------- */
+function setMode(m){
+  S.mode = m; closePop(); hideTip(); hovK = null;
+  document.body.className = m + (m === 'explore' ? ' noside' : '');
+  $('#side').hidden = m === 'explore';
+  $('#tl').hidden = m !== 'explore';
+  $('#prompt').hidden = true;
+  renderActions(); renderSide(); drawMap();
+  if (m === 'explore'){ drawTimeline(); requestAnimationFrame(() => { rulerW = 0; drawRuler(); }); }
+  requestAnimationFrame(drawLabels);
+  if (m !== 'explore') setTimeout(() => { if (S.mode === m) startTour(m === 'choose' ? 'choose' : 'play'); }, 450);
+}
+function renderActions(){
+  const a = $('#actions');
+  if (S.mode === 'explore') a.innerHTML = `<button id="aAbout" aria-label="About"><span class="lg">About</span><span class="sm">?</span></button><button id="aSamples"><span class="lg">Sample quizzes</span><span class="sm">Samples</span></button><button id="aJoin"><span class="lg">Join with a code</span><span class="sm">Join</span></button>`;
+  else if (S.mode === 'choose') a.innerHTML = `<button id="aBack">‹ Change date</button><button class="icon" id="aUndo" aria-label="Undo" title="Undo">↶</button><button class="icon" id="aRedo" aria-label="Redo" title="Redo">↷</button><button class="icon" id="aHelp" aria-label="How this works" title="How this works">?</button><button id="aPreview">Preview</button><button class="primary" id="aShare">Share</button>`;
+  else a.innerHTML = `<button class="icon" id="aHelp" aria-label="How to play" title="How to play">?</button>` + (S.from === 'editor' ? `<button class="primary" id="aEdit">‹ Back to editing</button>` : `<button id="aMake">Make your own</button>`);
+  const on = (id, f) => { const b = $('#' + id); if (b) b.onclick = f; };
+  on('aHelp', () => startTour(S.mode === 'choose' ? 'choose' : 'play', true));
+  on('aSamples', openSamples); on('aJoin', openJoin); on('aAbout', openAbout);
+  on('aBack', () => setMode('explore'));
+  on('aUndo', undo); on('aRedo', redo);
+  on('aPreview', () => { if (!S.pieces.length) return toast('Add at least one place first'); startPlay(currentCfg(), 'editor'); });
+  on('aShare', openShare);
+  on('aEdit', () => { S.play = null; setMode('choose'); });
+  on('aMake', () => { S.play = null; S.from = null; try{ history.replaceState(null, '', location.pathname + location.search); }catch{} setMode('explore'); });
+  const u = $('#aUndo'), r = $('#aRedo'); if (u){ u.disabled = !S.undo.length; r.disabled = !S.redo.length; }
+}
+
+/* ---------- choose pieces ---------- */
+const sideSnap = () => JSON.stringify({p:S.pieces, t:S.title, n:S.names, b:S.borders, m:S.qm});
+function snap(){ S.undo.push(sideSnap()); if (S.undo.length > 80) S.undo.shift(); S.redo = []; }
+function restore(s){ const o = JSON.parse(s); S.pieces = o.p; S.title = o.t; S.names = o.n; S.borders = o.b; S.qm = o.m || 0; changed(); }
+function undo(){ if (!S.undo.length) return; S.redo.push(sideSnap()); restore(S.undo.pop()); closePop(); }
+function redo(){ if (!S.redo.length) return; S.undo.push(sideSnap()); restore(S.redo.pop()); closePop(); }
+document.addEventListener('keydown', e => {
+  if (S.mode !== 'choose' || !(e.ctrlKey || e.metaKey) || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if (e.key.toLowerCase() === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); }
+  if (e.key.toLowerCase() === 'y'){ e.preventDefault(); redo(); }
+});
+function changed(){ renderSide(); drawMap(); renderActions(); save(); }
+const defTitle = () => `India on ${fmt(S.date)}`;
+function renderSide(){
+  const side = $('#side');
+  if (S.mode === 'choose'){
+    const us = units(S.era);
+    side.innerHTML = `<div class="cap"></div>
+      <div><h2 class="ptitle">Build a quiz</h2><p class="sub">${esc(fmt(S.date))} · ${us.length} places on this map</p></div>
+      <div class="field">What to place<div class="seg" role="radiogroup" aria-label="What to place">${['Shapes', 'Capitals', 'Both'].map((t, i) => `<button role="radio" aria-checked="${S.qm === i}" data-m="${i}" class="${S.qm === i ? 'on' : ''}">${t}</button>`).join('')}</div></div>
+      <label class="field sidehide">Quiz title<input id="titleIn" maxlength="90" placeholder="${esc(defTitle())}" value="${esc(S.title)}"></label>
+      <div class="row"><h3>Places (${S.pieces.length})</h3><button id="addAll">Add all</button><button id="clearAll" ${S.pieces.length ? '' : 'disabled'}>Clear</button></div>
+      ${S.pieces.length ? `<ol class="plist">${S.pieces.map((p, i) => { const u = S.era._k[p.k]; const cs = capsAt(S.era, S.date).filter(c => c.roles.some(r => r.u === p.k)).map(c => c.name).join(', ');
+          const line = p.prompt && S.qm !== 1 ? '“' + esc(p.prompt) + '”' : S.qm && cs ? 'Capital: ' + esc(cs) : S.qm ? 'No capital on this date' : esc(u.t);
+          return `<li data-i="${i}" data-k="${p.k}"><span class="sw sw${u.c}"></span><div><b>${esc(p.label || u.n)}</b><small>${line}</small></div><button data-rm="${i}" aria-label="Remove ${esc(p.label || u.n)}">×</button></li>`; }).join('')}</ol>`
+        : `<div class="empty">Click places on the map to add them. Click a chosen place again to add a prompt or change its label.</div>`}
+      <label class="toggle sidehide"><input type="checkbox" id="namesIn" ${S.names ? 'checked' : ''}>Show names on the tiles</label>
+      <label class="toggle sidehide"><input type="checkbox" id="bordersIn" ${S.borders ? 'checked' : ''}>Show borders on the quiz map</label>
+      <p class="hint sidehide">${S.qm === 1 ? 'The chosen places are coloured in on the quiz map, and each of their capitals becomes a pin to drop in the right spot.' : 'Hide names and add prompts for exam-style practice: read each prompt, find the shape and drop it in place.'}</p>`;
+    side.querySelectorAll('.seg button').forEach(b => b.onclick = () => { snap(); S.qm = +b.dataset.m; changed(); });
+    const ti = $('#titleIn'); ti.onfocus = () => snap(); ti.oninput = () => { S.title = ti.value; save(); };
+    $('#addAll').onclick = () => { snap(); for (const u of us) if (!S.pieces.some(p => p.k === u.k) && !u.foreign) S.pieces.push({k:u.k, label:'', prompt:''}); changed(); };
+    $('#clearAll').onclick = () => { snap(); S.pieces = []; changed(); };
+    $('#namesIn').onchange = e => { snap(); S.names = e.target.checked; save(); renderActions(); };
+    $('#bordersIn').onchange = e => { snap(); S.borders = e.target.checked; save(); renderActions(); };
+    side.querySelectorAll('.plist li').forEach(li => li.onclick = e => {
+      const rm = e.target.closest('[data-rm]');
+      if (rm){ e.stopPropagation(); snap(); S.pieces.splice(+rm.dataset.rm, 1); closePop(); changed(); return; }
+      openPop(li.dataset.k);
+    });
+    side.querySelectorAll('.plist li').forEach(li => { li.onmouseenter = () => setHover(li.dataset.k); li.onmouseleave = () => setHover(null); });
+  } else if (S.mode === 'play') renderPlaySide();
+}
+let popK = null, popSnapped = false;
+function openPop(k, e){
+  const u = S.era._k[k], p = S.pieces.find(p => p.k === k); if (!p) return;
+  popK = k; popSnapped = false; hideTip();
+  $('#popName').innerHTML = `${esc(u.n)}<small>${esc(u.t)}</small>`;
+  $('#popPrompt').value = p.prompt; $('#popLabel').value = p.label; $('#popLabel').placeholder = u.n;
+  $('#popSuggest').hidden = !u.note; $('#popSuggest').title = u.note || '';
+  const pop = $('#pop'), r = $('#stage').getBoundingClientRect(); pop.hidden = false;
+  let x, y;
+  if (e){ x = e.clientX - r.left + 16; y = e.clientY - r.top - 40; }
+  else { const s = screenOf(u.lp[0], u.lp[1]); x = s.x - r.left + 16; y = s.y - r.top - 40; }
+  if (x + 310 > r.width) x = Math.max(8, x - 340);
+  y = clamp(y, 64, Math.max(64, r.height - pop.offsetHeight - 10));
+  pop.style.left = x + 'px'; pop.style.top = y + 'px';
+  setTimeout(() => $('#popPrompt').focus({preventScroll:true}), 30);
+}
+function closePop(){ $('#pop').hidden = true; popK = null; }
+const popPiece = () => S.pieces.find(p => p.k === popK);
+const popEdit = f => { const p = popPiece(); if (!p) return; if (!popSnapped){ snap(); popSnapped = true; } f(p); save(); renderSide(); drawLabels(); renderActions(); };
+$('#popPrompt').oninput = e => popEdit(p => p.prompt = e.target.value.slice(0, 300));
+$('#popLabel').oninput = e => popEdit(p => p.label = e.target.value.slice(0, 60));
+$('#popSuggest').onclick = () => { const u = S.era._k[popK]; $('#popPrompt').value = u.note; popEdit(p => p.prompt = u.note); };
+$('#popRemove').onclick = () => { snap(); S.pieces = S.pieces.filter(p => p.k !== popK); closePop(); changed(); };
+$('#popDone').onclick = closePop; $('#popClose').onclick = closePop;
+$('#choose').onclick = () => {
+  units(S.era); const before = S.pieces.length; S.pieces = S.pieces.filter(p => S.era._k[p.k]);
+  setMode('choose');
+  if (before > S.pieces.length) toast(`${before - S.pieces.length} place(s) removed: they don’t exist on this date`);
+};
+
+/* ---------- activity code ---------- */
+function currentCfg(){
+  return {d:S.date, t:S.title.trim() || defTitle(), n:S.names, b:S.borders, m:S.qm, p:S.pieces.map(p => ({k:p.k, label:p.label.trim(), prompt:p.prompt.trim()}))};
+}
+async function pipe(bytes, Stream){ return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new Stream('deflate-raw'))).arrayBuffer()); }
+async function encode(cfg){
+  const o = {v:1, d:cfg.d, t:cfg.t, n:cfg.n ? 1 : 0, b:cfg.b ? 1 : 0, m:cfg.m || 0, p:cfg.p.map(p => [p.k, p.label || 0, p.prompt || 0])};
+  let bytes = new TextEncoder().encode(JSON.stringify(o)), flag = 1;
+  try { if (window.CompressionStream){ bytes = await pipe(bytes, CompressionStream); flag = 2; } } catch { flag = 1; }
+  let hex = flag.toString(16).padStart(2, '0'); for (const b of bytes) hex += b.toString(16).padStart(2, '0');
+  return BigInt('0x' + hex).toString(36);
+}
+async function decode(str){
+  str = String(str).trim().toLowerCase(); const m = str.match(/play-([0-9a-z]+)/); if (m) str = m[1];
+  str = str.replace(/\s+/g, '');
+  if (!/^[0-9a-z]{4,}$/.test(str)) throw new Error('bad');
+  let n = 0n; for (const ch of str) n = n * 36n + BigInt(parseInt(ch, 36));
+  let hex = n.toString(16); if (hex.length % 2) hex = '0' + hex;
+  let bytes = new Uint8Array(hex.length / 2); for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+  const flag = bytes[0]; bytes = bytes.slice(1);
+  if (flag === 2) bytes = await pipe(bytes, DecompressionStream);
+  const o = JSON.parse(new TextDecoder().decode(bytes));
+  if (!o || !o.d || !Array.isArray(o.p)) throw new Error('bad');
+  return {d:o.d, t:String(o.t || ''), n:!!o.n, b:!!o.b, m:[0, 1, 2].includes(o.m) ? o.m : 0, p:o.p.map(([k, l, pr]) => ({k:String(k), label:l ? String(l) : '', prompt:pr ? String(pr) : ''}))};
+}
+
+/* ---------- play ---------- */
+function shuffle(a){ for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function startPlay(cfg, from){
+  S.from = from;
+  const d = cfg.d < MIN_DATE ? MIN_DATE : cfg.d > TODAY ? TODAY : cfg.d;
+  S.date = d; S.era = eraFor(d); units(S.era);
+  const m = cfg.m || 0;
+  const ps = cfg.p.filter(p => S.era._k[p.k]);
+  const keys = new Set(ps.map(p => p.k));
+  const labels = Object.fromEntries(ps.filter(p => p.label).map(p => [p.k, p.label]));
+  const pins = m ? capsAt(S.era, d).filter(c => c.roles.some(r => keys.has(r.u))) : [];
+  S.play = {cfg:{...cfg, m, p:ps, labels}, m, keys, pins, pre:m === 1, misses:0, sel:null, pi:0,
+            prompts:m === 1 ? [] : ps.filter(p => p.prompt)};
+  resetPlayState();
+  resetView(); setMode('play'); renderPrompt();
+}
+function resetPlayState(){
+  const p = S.play;
+  p.placed = new Set(p.pre ? [...p.keys] : []); p.placedPins = new Set(); p.misses = 0; p.sel = null; p.pi = 0;
+  p.order = shuffle([...(p.m !== 1 ? [...p.keys].map(k => 'u:' + k) : []), ...p.pins.map(c => 'c:' + c.id)]);
+}
+function restartPlay(){ resetPlayState(); svg.classList.remove('selecting'); drawMap(); renderPlaySide(); renderPrompt(); }
+const progress = () => { const p = S.play; const total = (p.m !== 1 ? p.keys.size : 0) + p.pins.length; const n = (p.m !== 1 ? p.placed.size : 0) + p.placedPins.size; return {n, total}; };
+const progText = () => { const {n, total} = progress(), m = S.play.misses; return `${n} of ${total} placed${m ? ` · ${m} miss${m > 1 ? 'es' : ''}` : ''}`; };
+const PIN_INNER = `<path d="M0 2C-1-5-10-10-10-19a10 10 0 0 1 20 0C10-10 1-5 0 2z" style="fill:var(--red);stroke:none"/><circle cy="-19" r="3.8" style="fill:var(--panel);stroke:none"/>`;
+const PIN_SVG = `<svg viewBox="-13 -30 26 34" aria-hidden="true">${PIN_INNER}</svg>`;
+function tileSVG(u){
+  let [x0, y0, x1, y1] = u.bb; const w = x1 - x0, h = y1 - y0, m = Math.max(w, h) * 0.08 + 2, sz = Math.max(w, h) + m * 2;
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  const sw = u.a < 600 ? 3 : 1.2;
+  return `<svg viewBox="${(cx - sz/2).toFixed(1)} ${(cy - sz/2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}"><path d="${u.path}" class="c${u.c}" stroke="var(--c${u.c})" style="stroke-width:${sw}"/></svg>`;
+}
+const pinSub = c => S.play.cfg.n ? roleText(c, S.play.keys) : [...new Set(c.roles.filter(r => S.play.keys.has(r.u) || r.u === '_india').map(r => r.r))].join(', ');
+function renderPlaySide(){
+  const p = S.play, {n, total} = progress();
+  const left = p.order.filter(t => t[0] === 'u' ? !p.placed.has(t.slice(2)) : !p.placedPins.has(t.slice(2)));
+  const tile = t => {
+    const id = t.slice(2), sel = p.sel === t ? ' sel' : '';
+    if (t[0] === 'u'){ const u = S.era._k[id]; const lab = p.cfg.n ? (p.cfg.labels[id] || u.n) : '';
+      return `<div class="tile${sel}" role="button" tabindex="0" data-t="${t}" aria-label="${esc(lab || 'Unnamed place')}">${tileSVG(u)}<span>${esc(lab)}</span></div>`; }
+    const c = p.pins.find(x => x.id === id);
+    return `<div class="tile pin${sel}" role="button" tabindex="0" data-t="${t}" aria-label="${esc(c.name)} pin">${PIN_SVG}<span${c.name.length > 13 ? ' class="long"' : ''}>${esc(c.name)}</span><em>${esc(pinSub(c))}</em></div>`;
+  };
+  $('#side').innerHTML = `<div class="cap"></div>
+    <div><h2 class="ptitle">${esc(p.cfg.t)}</h2>${p.cfg.t.includes(fmt(S.date)) ? '' : `<p class="sub">The map of India on ${esc(fmt(S.date))}</p>`}</div>
+    <div class="prog"><div class="bar"><i style="width:${total ? n / total * 100 : 0}%"></i></div><span>${progText()}</span></div>
+    <div class="row"><h3>To place (${left.length})</h3><button id="restart">Start over</button></div>
+    ${left.length ? `<div class="bank" id="bank">${left.map(tile).join('')}</div>` : `<div class="done-bank">All done!</div>`}
+    <p class="hint sidehide">Drag each tile onto the map, or tap a tile and then tap its place. Zoom in for small places and exact capitals.</p>`;
+  $('#restart').onclick = restartPlay;
+  const bank = $('#bank'); if (!bank) return;
+  bank.addEventListener('pointerdown', tileDown);
+  bank.querySelectorAll('.tile').forEach(t => t.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectTile(t.dataset.t); } });
+}
+function selectTile(t){
+  S.play.sel = S.play.sel === t ? null : t;
+  document.querySelectorAll('.tile').forEach(x => x.classList.toggle('sel', x.dataset.t === S.play.sel));
+  svg.classList.toggle('selecting', !!S.play.sel);
+  if (S.play.sel) toast('Now tap the map where it belongs');
+}
+function renderPrompt(){
+  const p = S.play, box = $('#prompt');
+  if (S.mode !== 'play' || !p.prompts.length){ box.hidden = true; return; }
+  box.hidden = false;
+  p.pi = clamp(p.pi, 0, p.prompts.length - 1);
+  const q = p.prompts[p.pi], done = p.placed.has(q.k);
+  box.classList.toggle('ok', done);
+  $('#pNum').textContent = `Prompt ${p.pi + 1} of ${p.prompts.length}` + (done ? ` · answered: ${p.cfg.labels[q.k] || S.era._k[q.k].n} ✓` : '');
+  $('#pText').textContent = q.prompt;
+  $('#pPrev').disabled = p.pi === 0; $('#pNext').disabled = p.pi === p.prompts.length - 1;
+}
+$('#pPrev').onclick = () => { S.play.pi--; renderPrompt(); };
+$('#pNext').onclick = () => { S.play.pi++; renderPrompt(); };
+
+let drag = null;
+const dragG = $('#dragG');
+// position the floating piece with the SVG transform attribute (consistent in Safari), animate by hand
+const G = {x:0, y:0, s:1, o:1, raf:0};
+function ghostAt(x, y, s, o = 1){ cancelAnimationFrame(G.raf); G.x = x; G.y = y; G.s = s; G.o = o; dragG.setAttribute('transform', `translate(${x} ${y}) scale(${s})`); dragG.setAttribute('opacity', o); }
+function ghostTo(x, y, s, o, ms, done){
+  cancelAnimationFrame(G.raf);
+  const a = {...G}, t0 = performance.now(), ease = t => 1 - Math.pow(1 - t, 3);
+  const step = now => { const t = Math.min(1, (now - t0) / ms), k = ease(t);
+    G.x = a.x + (x - a.x) * k; G.y = a.y + (y - a.y) * k; G.s = a.s + (s - a.s) * k; G.o = a.o + (o - a.o) * k;
+    dragG.setAttribute('transform', `translate(${G.x} ${G.y}) scale(${G.s})`); dragG.setAttribute('opacity', G.o);
+    if (t < 1) G.raf = requestAnimationFrame(step); else done && done(); };
+  G.raf = requestAnimationFrame(step);
+}
+function tileDown(e){
+  const t = e.target.closest('.tile'); if (!t || e.button > 0) return;
+  e.preventDefault();
+  document.querySelectorAll('.tile.lift').forEach(x => x !== t && x.classList.remove('lift'));
+  const tok = t.dataset.t, id = tok.slice(2), pin = tok[0] === 'c';
+  drag = {tok, id, pin, u:pin ? null : S.era._k[id], c:pin ? S.play.pins.find(x => x.id === id) : null, t, id2:e.pointerId, x0:e.clientX, y0:e.clientY, moved:false,
+          offY:pin && e.pointerType === 'touch' ? -48 : 0};
+  if (!pin){
+    const u = drag.u, ts = t.querySelector('svg'); let g = {x:u.lp[0], y:u.lp[1]};
+    try { const m = boxCTM(ts), p = {x:(e.clientX - m.e) / m.a, y:(e.clientY - m.f) / m.d}; const [x0, y0, x1, y1] = u.bb, mx = (x1 - x0) * .08, my = (y1 - y0) * .08;
+      g = {x:clamp(p.x, x0 - mx, x1 + mx), y:clamp(p.y, y0 - my, y1 + my)}; } catch {}
+    drag.g = g;
+  }
+  window.addEventListener('pointermove', dragMove); window.addEventListener('pointerup', dragUp); window.addEventListener('pointercancel', dragUp);
+}
+const inStage = (x, y) => { const r = $('#stage').getBoundingClientRect(); return x > r.left && x < r.right && y > r.top && y < r.bottom; };
+function inFill(k, pt){ const el = $(`#units [data-k="${k}"]`); try { return !!el && el.isPointInFill(new DOMPoint(pt.x, pt.y)); } catch { return false; } }
+const snapTol = u => Math.max(clamp(6 + 0.15 * Math.sqrt(u.a), 10, 36), 14 / pxPerUnit());
+// dragged: the piece moves rigidly, so it is right when its offset from the true position is small
+function shapeNear(u, pt, tapped){
+  const k = pxPerUnit();
+  if (Math.hypot(pt.x - u.lp[0], pt.y - u.lp[1]) < snapTol(u)) return true;
+  if (!tapped) return false;
+  return inFill(u.k, pt) || u.rings.some(r => Math.hypot(pt.x - r.x, pt.y - r.y) < rr(r.e, k) + 10 / k);
+}
+const pinNear = (c, pt, tapped) => Math.hypot(pt.x - c.x, pt.y - c.y) < Math.max((tapped ? 22 : 18) / pxPerUnit(), 3);
+function setDragCursor(on, ok){ root.classList.toggle('dragging', on); root.classList.toggle('dropok', !!(on && ok)); }
+function dragMove(e){
+  if (!drag || e.pointerId !== drag.id2) return;
+  if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 6){
+    drag.moved = true; drag.t.classList.add('lift'); hideTip(); setDragCursor(true, false);
+    if (drag.pin){
+      drag.sc = 1;
+      dragG.innerHTML = `<g transform="translate(0,-2)">${PIN_INNER}</g><text x="13" y="-17">${esc(drag.c.name)}</text>`;
+    } else {
+      const u = drag.u, sc = pxPerUnit(); drag.sc = sc;
+      const lab = S.play.cfg.n ? (S.play.cfg.labels[u.k] || u.n) : '';
+      const g = drag.g;
+      dragG.innerHTML = `<g transform="translate(${-g.x},${-g.y})"><path d="${u.path}" class="c${u.c}" stroke="var(--c${u.c})" style="stroke-width:${u.a < 600 ? 2.5 : 1}" fill-opacity=".92"/>${u.rings.map(r => `<circle cx="${r.x}" cy="${r.y}" r="${rr(r.e, sc)}"/>`).join('')}</g>`;
+      if (lab) dragG.innerHTML += `<text transform="translate(${u.lp[0] - g.x},${u.lp[1] - g.y}) scale(${1/sc})" dy="${u.rings.length ? 30 : 4}" text-anchor="middle">${esc(lab)}</text>`;
+    }
+  }
+  if (!drag.moved) return;
+  const x = e.clientX, y = e.clientY + drag.offY;
+  let snap = false;
+  if (inStage(x, y)){ const pt = mapPt(x, y); snap = drag.pin ? pinNear(drag.c, pt) : shapeNear(drag.u, equiv(drag, pt)); }
+  if (snap !== !!drag.snap){ drag.snap = snap; dragG.classList.toggle('snap', snap); setDragCursor(true, snap); if (snap && navigator.vibrate) try { navigator.vibrate(8); } catch {} }
+  ghostAt(x, y, drag.sc);
+}
+// where the piece's label point would be if dropped now (the piece moves rigidly with the pointer)
+const equiv = (d, pt) => ({x:d.u.lp[0] + pt.x - d.g.x, y:d.u.lp[1] + pt.y - d.g.y});
+function dragUp(e){
+  if (!drag || e.pointerId !== drag.id2) return;
+  window.removeEventListener('pointermove', dragMove); window.removeEventListener('pointerup', dragUp); window.removeEventListener('pointercancel', dragUp);
+  const d = drag;
+  if (!d.moved){ drag = null; selectTile(d.tok); return; }
+  const x = e.clientX, y = e.clientY + d.offY;
+  dragG.classList.remove('snap'); setDragCursor(false);
+  if (e.type === 'pointerup' && inStage(x, y)){ const pt = mapPt(x, y); d.snap = d.pin ? pinNear(d.c, pt) : shapeNear(d.u, equiv(d, pt)); }
+  if (e.type !== 'pointerup' || !inStage(x, y)) flyBack(false);
+  else if (d.pin) tryPin(d.id, mapPt(x, y), false, d.snap);
+  else tryPlace(d.id, equiv(d, mapPt(x, y)), false, d.snap);
+}
+function flyBack(bad){
+  const d = drag; if (!d){ return; }
+  const tr = d.t.getBoundingClientRect();
+  ghostTo(tr.left + tr.width / 2, tr.top + tr.height / 2, d.sc * 0.2, 0, 280, () => { dragG.innerHTML = ''; ghostAt(0, 0, 1, 1); d.t.classList.remove('lift'); if (bad){ d.t.classList.remove('bad'); void d.t.offsetWidth; d.t.classList.add('bad'); } });
+  drag = null;
+}
+function miss(tok, msg){
+  S.play.misses++; toast(msg);
+  if (drag) flyBack(true);
+  else { const t = $(`.tile[data-t="${tok}"]`); if (t){ t.classList.remove('bad'); void t.offsetWidth; t.classList.add('bad'); } }
+  const sp = document.querySelector('.prog span'); if (sp) sp.textContent = progText();
+}
+function landed(sx, sy, sc, finish){
+  if (drag){
+    drag = null; ghostTo(sx, sy, sc, 1, 200, finish);
+  } else finish();
+}
+const checkDone = () => { const {n, total} = progress(); if (n === total) setTimeout(showDone, 600); };
+function tryPlace(k, pt, tapped, snapped){
+  const u = S.era._k[k], p = S.play;
+  const ok = snapped || shapeNear(u, pt, tapped);
+  const lab = p.cfg.labels[k] || u.n;
+  if (!ok) return miss('u:' + k, p.cfg.n ? `Not quite. That’s not where ${lab} goes.` : 'Not quite. Try another spot.');
+  p.placed.add(k); p.sel = null; svg.classList.remove('selecting');
+  const s = drag && drag.g ? screenOf(drag.g.x, drag.g.y) : screenOf(u.lp[0], u.lp[1]);
+  landed(s.x, s.y, pxPerUnit(), () => {
+    dragG.innerHTML = ''; drawMap(); renderPlaySide();
+    const el = $(`#units [data-k="${k}"]`); el && el.classList.add('flash');
+    const qi = p.prompts.findIndex(q => q.k === k);
+    if (qi >= 0 && qi === p.pi){ const nx = p.prompts.findIndex(q => !p.placed.has(q.k)); if (nx >= 0) p.pi = nx; }
+    renderPrompt(); toast(`${lab} ✓`); checkDone();
+  });
+}
+function tryPin(id, pt, tapped, snapped){
+  const p = S.play, c = p.pins.find(x => x.id === id);
+  const ok = snapped || pinNear(c, pt, tapped);
+  if (!ok) return miss('c:' + id, `Not quite. ${c.name} is somewhere else. Zoom in for a closer look.`);
+  p.placedPins.add(id); p.sel = null; svg.classList.remove('selecting');
+  const s = screenOf(c.x, c.y);
+  landed(s.x, s.y, 1, () => { dragG.innerHTML = ''; drawLabels(); renderPlaySide(); toast(`${c.name} ✓`); checkDone(); });
+}
+function showDone(){
+  const p = S.play, {total} = progress(), acc = Math.round(total / (total + p.misses) * 100);
+  const sh = p.m !== 1 ? p.keys.size : 0, pc = p.pins.length;
+  const what = [sh ? `${sh} place${sh > 1 ? 's' : ''}` : '', pc ? `${pc} capital${pc > 1 ? 's' : ''}` : ''].filter(Boolean).join(' and ');
+  modal(`<div class="big">${acc}%</div><h2>Map complete!</h2><p>You placed all ${what} of India as it was on ${esc(fmt(S.date))}, with ${p.misses ? p.misses + ' miss' + (p.misses > 1 ? 'es' : '') : 'no misses'}.</p>
+    <div class="row"><button class="primary" id="mAgain">Play again</button><button id="mClose">Look at the map</button>${S.from === 'editor' ? '<button id="mEdit">Back to editing</button>' : ''}</div>`);
+  $('#mAgain').onclick = () => { closeModal(); restartPlay(); };
+  $('#mClose').onclick = closeModal;
+  const me = $('#mEdit'); if (me) me.onclick = () => { closeModal(); S.play = null; setMode('choose'); };
+}
+
+/* ---------- onboarding tour ---------- */
+const TOURS = {
+  explore: [
+    {t:'Welcome to Bharat Bhoogol', p:'Practise India’s political map as it was on <b>any date since 26 January 1950</b>, or as it is today. Here’s a quick look around; it takes under a minute.<br><small style="color:var(--mute);font-size:13px">2026 · Built with ❤️ by Shagun</small>'},
+    {sel:'#units', t:'The map', p:'This is India on the chosen date. <b>Hover or tap any place</b> to see its name, what kind of state or territory it was, and a line of history. Hatched areas were not yet part of India.'},
+    {sel:'#ruler', t:'The time slider', p:'<b>Drag the slider</b> to travel from 1950 to today. Each dot is a change, like a new state or a renaming, and the thumb clicks onto the dots as you pass them.', pad:10},
+    {sel:['#evPrev', '#evNext', '#dateIn'], t:'Exact dates', p:'Use the <b>arrows</b> to jump from one change to the next, or <b>type any date</b> to see the map on that day.'},
+    {sel:'#zcaps', t:'Capitals', p:'Show every <b>capital city</b> for the date: a star for New Delhi, solid dots for capitals, hollow dots for summer, winter, second and joint capitals.'},
+    {sel:['#zin', '#zout', '#zreset'], t:'Zoom', p:'Zoom in for small places like Delhi, Chandigarh, Goa and Puducherry. You can also scroll or pinch on the map, and drag it to move around.'},
+    {sel:'#aSamples', t:'Ready-made quizzes', p:'Start a quiz straight away: <b>all state and UT capitals</b>, the 1956 reorganisation, the princely unions of 1950 and more.'},
+    {sel:'#choose', t:'Build your own quiz', p:'Pick a date, then choose which places to practise, as <b>shapes, capitals or both</b>, with your own prompts.'},
+    {sel:'#aJoin', t:'Got a code?', p:'If a friend sent you a quiz code, paste it here to start their quiz.'},
+    {sel:'#themeBtn', t:'Light or dark', p:'Switch between light and dark mode whenever you like. That’s it. Happy mapping!'}
+  ],
+  choose: [
+    {sel:'.seg', t:'What to place', p:'<b>Shapes</b>: drag each place onto the map. <b>Capitals</b>: the places are coloured in and you pin each capital. <b>Both</b>: shapes, then capitals.'},
+    {sel:'#units', t:'Pick places on the map', p:'<b>Click places</b> to add them to the quiz. Click a chosen place again to add an exam-style <b>prompt</b> or change its label. <b>Add all</b> takes every place at once.'},
+    {sel:['#namesIn', '#bordersIn'], t:'Make it harder', p:'Turn off <b>names</b> to test recognition by shape alone, or <b>borders</b> to place pieces on a blank outline.', parent:'.toggle'},
+    {sel:['#aPreview', '#aShare'], t:'Try it, then share', p:'<b>Preview</b> plays the quiz yourself. <b>Share</b> gives a quiz code that anyone can paste into Bharat Bhoogol.'}
+  ],
+  play: [
+    {sel:'#bank', t:'Your pieces', p:'These are the places (or capital pins) to put on the map. <b>Drag a tile</b> onto the map; the piece stays exactly under your finger or pointer.'},
+    {sel:'#units', t:'Drop it in place', p:'When the piece is over the right spot, the <b>cursor turns into a green tick ✓</b> and the piece glows blue. Let go to lock it in. A wrong drop sends it back and counts as a miss.'},
+    {sel:'#prompt', t:'Prompts', p:'Some quizzes ask a question. Find the piece that answers it, and use the arrows to move between prompts.'},
+    {sel:'.prog', t:'Your progress', p:'See how many you’ve placed and how many misses. You can also <b>tap a tile, then tap the map</b> instead of dragging. Good luck!'}
+  ]
+};
+const tourSeen = n => { try { return localStorage.getItem('bb-tour-' + n) === '1'; } catch { return true; } };
+const tourMark = n => { try { localStorage.setItem('bb-tour-' + n, '1'); } catch {} };
+let TR = null;
+function visibleRect(el){ if (!el) return null; const r = el.getBoundingClientRect(); return r.width > 2 && r.height > 2 && getComputedStyle(el).visibility !== 'hidden' ? r : null; }
+function stepRect(st){
+  if (!st.sel) return null;
+  const sels = Array.isArray(st.sel) ? st.sel : [st.sel];
+  const rs = sels.map(q => { let el = $(q); if (el && st.parent) el = el.closest(st.parent) || el; return visibleRect(el); }).filter(Boolean);
+  if (!rs.length) return null;
+  const x0 = Math.min(...rs.map(r => r.left)), y0 = Math.min(...rs.map(r => r.top)), x1 = Math.max(...rs.map(r => r.right)), y1 = Math.max(...rs.map(r => r.bottom));
+  return {left:x0, top:y0, right:x1, bottom:y1, width:x1 - x0, height:y1 - y0};
+}
+function startTour(name, force){
+  if (!force && tourSeen(name)) return;
+  if (TR || !$('#modal').hidden) return;
+  const steps = TOURS[name].filter(st => !st.sel || stepRect(st));
+  if (!steps.length) return;
+  closePop(); hideTip();
+  TR = {name, steps, i:0}; $('#tour').hidden = false; showStep();
+  $('#tNext').focus({preventScroll:true});
+}
+function endTour(){ if (!TR) return; tourMark(TR.name); TR = null; $('#tour').hidden = true; }
+function showStep(){
+  const st = TR.steps[TR.i], n = TR.steps.length, spot = $('#tSpot'), card = $('#tCard'), arrow = $('#tArrow');
+  $('#tTitle').textContent = st.t; $('#tText').innerHTML = st.p;
+  $('#tDots').innerHTML = TR.steps.map((_, i) => `<i class="${i === TR.i ? 'on' : ''}"></i>`).join('');
+  $('#tBack').hidden = TR.i === 0; $('#tNext').textContent = TR.i === n - 1 ? 'Done' : TR.i === 0 && !st.sel ? 'Show me' : 'Next';
+  $('#tSkip').hidden = TR.i === n - 1;
+  const W = innerWidth, H = innerHeight, r = stepRect(st);
+  const cw = card.offsetWidth, ch = card.offsetHeight, gap = 16;
+  if (!r){
+    spot.classList.add('none'); Object.assign(spot.style, {left:W / 2 + 'px', top:H / 2 + 'px', width:'0px', height:'0px'});
+    arrow.hidden = true; card.style.left = (W - cw) / 2 + 'px'; card.style.top = (H - ch) / 2 + 'px'; return;
+  }
+  spot.classList.remove('none');
+  const pad = st.pad ?? 8, big = r.width > W * .5 && r.height > H * .5;
+  const sx = Math.max(4, r.left - pad), sy = Math.max(4, r.top - pad), sw = Math.min(W - 8, r.width + pad * 2), sh = Math.min(H - 8, r.height + pad * 2);
+  Object.assign(spot.style, {left:sx + 'px', top:sy + 'px', width:sw + 'px', height:sh + 'px', borderRadius:big ? '28px' : '16px'});
+  // place the callout: below, above, right, left, or inside (for big areas)
+  let x, y, side;
+  const cx = sx + sw / 2;
+  if (big){ x = sx + sw - cw - 20; y = sy + 20; side = null; if (x < 12) x = (W - cw) / 2; }
+  else if (sy + sh + gap + ch < H - 8){ x = cx - cw / 2; y = sy + sh + gap; side = 'top'; }
+  else if (sy - gap - ch > 8){ x = cx - cw / 2; y = sy - gap - ch; side = 'bottom'; }
+  else if (sx + sw + gap + cw < W - 8){ x = sx + sw + gap; y = sy + sh / 2 - ch / 2; side = 'left'; }
+  else { x = sx - gap - cw; y = sy + sh / 2 - ch / 2; side = 'right'; }
+  x = clamp(x, 12, W - cw - 12); y = clamp(y, 12, H - ch - 12);
+  card.style.left = x + 'px'; card.style.top = y + 'px';
+  arrow.hidden = !side;
+  if (side === 'top' || side === 'bottom'){ arrow.style.left = clamp(cx - x - 8, 18, cw - 34) + 'px'; arrow.style.top = side === 'top' ? '-7px' : (ch - 9) + 'px'; }
+  if (side === 'left' || side === 'right'){ arrow.style.top = clamp(sy + sh / 2 - y - 8, 18, ch - 34) + 'px'; arrow.style.left = side === 'left' ? '-7px' : (cw - 9) + 'px'; }
+}
+$('#tNext').onclick = () => { if (!TR) return; if (TR.i < TR.steps.length - 1){ TR.i++; showStep(); } else endTour(); };
+$('#tBack').onclick = () => { if (TR && TR.i > 0){ TR.i--; showStep(); } };
+$('#tSkip').onclick = endTour;
+$('#tour').addEventListener('pointerdown', e => { if (e.target.id === 'tour') e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  if (!TR) return;
+  if (e.key === 'Escape'){ e.preventDefault(); e.stopImmediatePropagation(); endTour(); }
+  else if (e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); $('#tNext').click(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); $('#tBack').click(); }
+}, true);
+addEventListener('resize', () => { if (TR) showStep(); });
+
+/* ---------- modal dialogs ---------- */
+function modal(html){ $('#card').innerHTML = html; $('#modal').hidden = false; const f = $('#card').querySelector('button,textarea,input'); f && f.focus({preventScroll:true}); }
+function closeModal(){ $('#modal').hidden = true; }
+$('#modal').addEventListener('pointerdown', e => { if (e.target.id === 'modal') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeModal(); closePop(); if (S.play && S.play.sel) selectTile(S.play.sel); } });
+async function copy(text, btn){ try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied ✓'; } catch { btn.textContent = 'Select and copy it'; } setTimeout(() => btn.textContent = btn.dataset.l, 1800); }
+async function openShare(){
+  if (!S.pieces.length) return toast('Add at least one place first');
+  const cfg = currentCfg(), code = await encode(cfg);
+  const kind = ['shapes', 'capitals', 'shapes and capitals'][cfg.m];
+  modal(`<h2>Share this quiz</h2>
+    <p><b>${esc(cfg.t)}</b> · ${cfg.p.length} place${cfg.p.length > 1 ? 's' : ''} · ${kind}${(n => n && cfg.m !== 1 ? ` · ${n} prompt${n > 1 ? 's' : ''}` : '')(cfg.p.filter(p => p.prompt).length)}</p>
+    <label class="field">Quiz code<textarea class="code" id="shCode" rows="3" readonly>${esc(code)}</textarea></label>
+    <div class="row"><button class="primary" id="shCopy" data-l="Copy code">Copy code</button><button id="shPlay">Start it here</button></div>
+    <p class="hint">To practise on another device or send it to a friend, open Bharat Bhoogol there, choose <b>Join with a code</b> and paste the code. To skip that step, add <b>#play-</b> and the code to the end of the page’s link.</p>
+    <div class="row"><button id="shLink" data-l="Copy #play- ending">Copy #play- ending</button><button id="shClose" style="margin-left:auto">Done</button></div>`);
+  $('#shCode').onclick = e => e.target.select();
+  $('#shCopy').onclick = e => copy(code, e.target);
+  $('#shLink').onclick = e => copy('#play-' + code, e.target);
+  $('#shPlay').onclick = () => { closeModal(); startPlay(cfg, 'editor'); };
+  $('#shClose').onclick = closeModal;
+}
+function openAbout(){
+  modal(`<h2>About Bharat Bhoogol</h2>
+    <p>Pick any date from 26 January 1950, when the Constitution came into force, to today. The map shows the states, union territories and other areas in force on that day, from the Part A, B and C states of 1950 through the 1956 reorganisation to the ${ERAS.length} changes marked on the timeline.</p>
+    <p>Capitals follow the seat of government on each date, including summer, winter, second and joint capitals, and city renamings such as Madras to Chennai. Moves are shown to the year. A star marks New Delhi; hollow pins mark summer, winter, second and joint capitals.</p>
+    <p>Historical borders are rebuilt from 2011 census district lines, so a few borders that followed smaller units (such as single taluks) are approximate. Areas that were not yet part of India, such as Portuguese and French India and the kingdom of Sikkim, are shown hatched.</p>
+    <p>India’s outer boundary follows the Survey of India depiction used in Indian textbooks. District boundaries: DataMeet India community, licensed CC BY 2.5 India.</p>
+    <div class="row"><button class="primary" id="abX">Close</button><button id="abTour">Show the tour again</button></div>`);
+  $('#abX').onclick = closeModal;
+  $('#abTour').onclick = () => { closeModal(); setTimeout(() => startTour(S.mode === 'explore' ? 'explore' : S.mode === 'choose' ? 'choose' : 'play', true), 250); };
+}
+function openJoin(){
+  modal(`<h2>Open a quiz</h2><p>Paste the quiz code you were sent.</p>
+    <textarea class="code" id="jCode" rows="4" placeholder="Quiz code"></textarea><p class="err" id="jErr" hidden>That code doesn’t look right. Check that you copied all of it.</p>
+    <div class="row"><button class="primary" id="jGo">Start</button><button id="jX">Cancel</button></div>`);
+  $('#jX').onclick = closeModal;
+  $('#jGo').onclick = async () => { try { const cfg = await decode($('#jCode').value); closeModal(); startPlay(cfg, 'code'); } catch { $('#jErr').hidden = false; } };
+}
+const SAMPLES = [
+  {t:'State and UT capitals today', s:'Pin every state and union territory capital, summer and winter capitals included.', d:TODAY, n:true, b:true, m:1, p:'all'},
+  {t:'Capitals of 1956', s:'Place each state of the reorganised map and pin its capital.', d:'1956-11-01', n:true, b:true, m:2, p:'all'},
+  {t:'Princely unions of 1950', s:'Find the states built from former princely states, one prompt each.', d:'1950-01-26', n:true, b:true, p:[
+    ['hyderabad', 'The Nizam’s former state, integrated with India by Operation Polo in 1948.'],
+    ['mysore', 'This princely state’s ruler, Maharaja Jayachamarajendra Wadiyar, became its Rajpramukh.'],
+    ['tc', 'Formed in 1949 by merging two princely states on the south-western coast.'],
+    ['saurashtra', 'A union of more than 200 Kathiawar princely states.'],
+    ['madhya_bharat', 'Gwalior and Indore formed the core of this union.'],
+    ['pepsu', 'Patiala, Nabha, Jind and Kapurthala joined to make this union.'],
+    ['rajasthan', 'A union of the Rajputana states, built up in stages from 1948.'],
+    ['vindhya', 'Rewa and the Bundelkhand states formed this Part C state.'],
+    ['jk', 'Its Maharaja signed the Instrument of Accession in October 1947.']]},
+  {t:'The States Reorganisation of 1956', s:'Eight states redrawn along language lines.', d:'1956-11-01', n:false, b:true, p:[
+    ['ap', 'Andhra State joined the Telugu-speaking Telangana region of Hyderabad.'],
+    ['kerala', 'Travancore-Cochin joined with Malabar and Kasaragod.'],
+    ['mysore', 'Unified the Kannada-speaking areas of four neighbouring states.'],
+    ['bombay', 'The largest state of 1956, home to both Marathi and Gujarati speakers.'],
+    ['madras', 'The Tamil-speaking state, with Kanyakumari newly added.'],
+    ['mp', 'Madhya Bharat, Vindhya Pradesh and Bhopal were merged into this state.'],
+    ['punjab', 'PEPSU was merged into this state.'],
+    ['rajasthan', 'Ajmer was merged into this state.']]},
+  {t:'India today', s:'Place all 28 states and 8 union territories.', d:TODAY, n:true, b:true, p:'all'}
+];
+function openSamples(){
+  modal(`<h2>Sample quizzes</h2><p>Start one now, or open it in the editor to change it.</p>
+    <div class="samples">${SAMPLES.map((s, i) => `<div class="row"><button data-s="${i}" style="flex:1"><b>${esc(s.t)}</b><small>${esc(fmt(s.d))} · ${esc(s.s)}</small></button><button data-e="${i}">Edit</button></div>`).join('')}</div>
+    <div class="row"><button id="sX" style="margin-left:auto">Close</button></div>`);
+  $('#sX').onclick = closeModal;
+  const cfgOf = s => { const era = eraFor(s.d); const us = units(era); const p = s.p === 'all' ? us.filter(u => !u.foreign).map(u => ({k:u.k, label:'', prompt:''})) : s.p.map(([k, pr]) => ({k, label:'', prompt:pr})); return {d:s.d, t:s.t, n:s.n, b:s.b, m:s.m || 0, p}; };
+  $('#card').querySelectorAll('[data-s]').forEach(b => b.onclick = () => { closeModal(); startPlay(cfgOf(SAMPLES[+b.dataset.s]), 'sample'); });
+  $('#card').querySelectorAll('[data-e]').forEach(b => b.onclick = () => {
+    const c = cfgOf(SAMPLES[+b.dataset.e]); closeModal(); snap();
+    S.date = c.d; S.era = eraFor(c.d); units(S.era); S.title = c.t; S.names = c.n; S.borders = c.b; S.qm = c.m; S.pieces = c.p; save(); setMode('choose');
+  });
+}
+let toastT = 0;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); }
+function save(){ if (S.mode === 'play' && S.from !== 'editor') return; store.set('bharat-bhoogol-draft', {d:S.date, p:S.pieces, t:S.title, n:S.names, b:S.borders, m:S.qm, c:S.caps}); }
+
+/* ---------- boot ---------- */
+new ResizeObserver(() => { drawLabels(); if (S.mode === 'explore') drawRuler(); }).observe(document.body);
+(async () => {
+  try {
+    const [topo, eras] = await Promise.all([fetch('data/districts.json').then(r => r.json()), fetch('data/eras.json').then(r => r.json())]);
+    TOPO = topo; OBJ = topo.objects.districts; GEOMS = OBJ.geometries; GEOMS.forEach((g, i) => g._i = i);
+    ERAS = eras.eras; META = eras.meta; CAPS = eras.caps;
+    svg.setAttribute('viewBox', `-30 -50 ${META.W + 60} ${META.H + 70}`);
+    OUTLINE = linePath(topojson.mesh(TOPO, OBJ, (a, b) => a === b));
+  } catch (err) { $('#loading').textContent = 'The map data could not be loaded. Please reload the page.'; return; }
+  $('#loading').remove(); $('#app').hidden = false;
+  const dr = store.get('bharat-bhoogol-draft');
+  if (dr && typeof dr.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(dr.d)){ S.date = dr.d < MIN_DATE ? MIN_DATE : dr.d > TODAY ? TODAY : dr.d; S.pieces = Array.isArray(dr.p) ? dr.p : []; S.title = dr.t || ''; S.names = dr.n !== false; S.borders = dr.b !== false; S.qm = [0, 1, 2].includes(dr.m) ? dr.m : 0; S.caps = !!dr.c; }
+  S.era = eraFor(S.date); units(S.era);
+  S.pieces = S.pieces.filter(p => S.era._k[p.k]);
+  setMode('explore'); drawTimeline(); applyView();
+  capBtn();
+  const h = location.hash;
+  if (h.startsWith('#play-')){ try { startPlay(await decode(h), 'code'); } catch { toast('That quiz link is incomplete'); } }
+  else setTimeout(() => { if (S.mode === 'explore') startTour('explore'); }, 700);
+})();
+}
+</script>
+</body>
+</html>
