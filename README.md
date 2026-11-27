@@ -2,7 +2,11 @@
 
 An interactive quiz on India's political map from 1950 to today. Pick any date, see India's states and union territories as they were on that day, then drag states into place, pin their capitals and share quizzes with friends.
 
-Built for UPSC and competitive-exam geography practice, and for anyone curious about how India's map has changed.
+## Why I built it
+
+I built Bharat Bhoogol for the people around me who find geography hard. My younger brother and sister are in school and often struggle with it, and a friend preparing for UPSC kept losing marks on map-based questions. Textbook maps and lists of states and capitals are static. I wanted something they could practise with by doing: drag a state into place, pin a capital, and see how India's map has changed over time.
+
+It works for school students learning the states and capitals, for UPSC and state PSC aspirants revising for map questions, and for anyone curious about how India's map has changed.
 
 ## Features
 
